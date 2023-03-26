@@ -1,0 +1,3 @@
+login
+upload /workspaces/AmineDownload/1 /影视
+exit
