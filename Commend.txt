@@ -26,6 +26,7 @@ aria2c --max-download-limit=300K -s10 -x10 'http://xx.com/xx'
 整体下载最大速度：
 aria2c --max-overall-download-limit=300k -s10 -x10 'http://xx.com/xx'
 
+https://github.com/tickstep/aliyunpan/releases/download/v0.2.7/aliyunpan-v0.2.7-linux-amd64.zip
 cd aliyunpan-v0.2.6-linux-amd64
 ./aliyunpan login
 e0019915e49646cfbd99e0d491748ef1
