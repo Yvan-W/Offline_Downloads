@@ -4,7 +4,7 @@ sudo apt-get update
 安装命令:
 sudo apt install aria2
 启动
-aria2c --conf-path="/workspaces/Amine/aria2.conf"
+aria2c --conf-path="/workspaces/Amine/aria2.conf" 1.torrent
 1、直链下载
 下载直链文件，只需在命令后附加地址，如：
 aria2c http://xx.com/xx
@@ -32,7 +32,7 @@ https://github.com/tickstep/aliyunpan/releases/download/v0.2.7/aliyunpan-v0.2.7-
 cd aliyunpan-v0.2.6-linux-amd64
 ./aliyunpan login
 e0019915e49646cfbd99e0d491748ef1
-./aliyunpan upload /workspaces/Amine/欢迎来到实力至上的教室 /影视/Server_upload
+./aliyunpan upload /workspaces/Amine/Server_upload /影视
 
 zip -r x.zip x
 unzip aliyunpan-v0.2.6-linux-amd64.zip
