@@ -1,0 +1,93 @@
+{
+ "configVer": "1.0",
+ "activeUID": "ccb46aff541b4d07978c7aa419c03297",
+ "userList": [
+  {
+   "userId": "ccb46aff541b4d07978c7aa419c03297",
+   "nickname": "I-Fan",
+   "accountName": "187***227",
+   "workdir": "/",
+   "workdirFileEntity": {
+    "driveId": "",
+    "domainId": "",
+    "fileId": "root",
+    "fileName": "/",
+    "fileSize": 0,
+    "fileType": "folder",
+    "createdAt": "",
+    "updatedAt": "",
+    "fileExtension": "",
+    "uploadId": "",
+    "parentFileId": "",
+    "crc64Hash": "",
+    "contentHash": "",
+    "contentHashName": "",
+    "path": "/",
+    "category": "",
+    "syncFlag": false,
+    "syncMeta": ""
+   },
+   "albumWorkdir": "",
+   "albumWorkdirFileEntity": {
+    "driveId": "",
+    "domainId": "",
+    "fileId": "",
+    "fileName": "",
+    "fileSize": 0,
+    "fileType": "",
+    "createdAt": "",
+    "updatedAt": "",
+    "fileExtension": "",
+    "uploadId": "",
+    "parentFileId": "",
+    "crc64Hash": "",
+    "contentHash": "",
+    "contentHashName": "",
+    "path": "",
+    "category": "",
+    "syncFlag": false,
+    "syncMeta": ""
+   },
+   "activeDriveId": "2049231",
+   "driveList": [
+    {
+     "driveId": "2049231",
+     "driveName": "文件",
+     "driveTag": "File"
+    },
+    {
+     "driveId": "7205876",
+     "driveName": "相册",
+     "driveTag": "Album"
+    }
+   ],
+   "refreshToken": "abc614687a034c4e973f9580789181c1",
+   "webToken": {
+    "accessTokenType": "Bearer",
+    "accessToken": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjY2I0NmFmZjU0MWI0ZDA3OTc4YzdhYTQxOWMwMzI5NyIsImN1c3RvbUpzb24iOiJ7XCJjbGllbnRJZFwiOlwiMjVkelgzdmJZcWt0Vnh5WFwiLFwiZG9tYWluSWRcIjpcImJqMjlcIixcInNjb3BlXCI6W1wiRFJJVkUuQUxMXCIsXCJTSEFSRS5BTExcIixcIkZJTEUuQUxMXCIsXCJVU0VSLkFMTFwiLFwiVklFVy5BTExcIixcIlNUT1JBR0UuQUxMXCIsXCJTVE9SQUdFRklMRS5MSVNUXCIsXCJCQVRDSFwiLFwiT0FVVEguQUxMXCIsXCJJTUFHRS5BTExcIixcIklOVklURS5BTExcIixcIkFDQ09VTlQuQUxMXCIsXCJTWU5DTUFQUElORy5MSVNUXCIsXCJTWU5DTUFQUElORy5ERUxFVEVcIl0sXCJyb2xlXCI6XCJ1c2VyXCIsXCJyZWZcIjpcImh0dHBzOi8vd3d3LmFsaXl1bmRyaXZlLmNvbS9cIixcImRldmljZV9pZFwiOlwiYWJjNjE0Njg3YTAzNGM0ZTk3M2Y5NTgwNzg5MTgxYzFcIn0iLCJleHAiOjE2ODI2MTYxNzcsImlhdCI6MTY4MjYwODkxN30.n-Gdv4AWrBS4kkHhiFg7r1O1xDVrCQn5VQnFlsmfCpJnAPPBysnHWTlZ-ZQP-Q1W8uw028uI5ML53YcO8TkA9Gf1_zMgjtfuGGorgHTFANKIKmGTpEIfblzAlEEo691nyKzYZ5zeWk50Gws1izNmE5zsfvziHS06V0s2itb19gc",
+    "refreshToken": "abc614687a034c4e973f9580789181c1",
+    "expiresIn": 7200,
+    "expireTime": "2023-04-27 17:22:57"
+   },
+   "tokenId": ""
+  }
+ ],
+ "cacheSize": 0,
+ "maxDownloadParallel": 0,
+ "maxUploadParallel": 0,
+ "maxDownloadRate": 0,
+ "maxUploadRate": 0,
+ "transferUrlType": 0,
+ "saveDir": "/home/codespace/Downloads",
+ "proxy": "",
+ "localAddrs": "",
+ "updateCheckInfo": {
+  "preferUpdateSrv": "",
+  "latestVer": "",
+  "checkTime": 0
+ },
+ "videoFileExtensions": "mp4,flv,mkv,mov,rm,rmvb,wmv,wma,mv,asf,asx,mpg,mpeg,mpe,3gp,m4v,avi,vob",
+ "fileRecordConfig": "1",
+ "deviceId": "2tOJCeWUvvJO53cL1KoUE699",
+ "deviceName": "Chrome浏览器"
+}
