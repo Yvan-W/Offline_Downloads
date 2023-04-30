@@ -4,7 +4,7 @@ sudo apt-get update
 安装命令:
 sudo apt install aria2
 启动
-aria2c --conf-path="/workspaces/Amine/aria2.conf" --select-file=1-278 1.torrent
+sudo aria2c --conf-path="/workspaces/Amine/aria2.conf" --select-file=13-158 1.torrent
 1、直链下载
 下载直链文件，只需在命令后附加地址，如：
 aria2c http://xx.com/xx
