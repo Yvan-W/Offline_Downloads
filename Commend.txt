@@ -4,6 +4,7 @@ sudo apt-get update
 安装命令:
 sudo apt install aria2
 启动
+sudo aria2c --conf-path="/workspaces/Amine/aria2.conf" --select-file=2,4,5,10,12 1.torrent
 sudo aria2c --conf-path="/workspaces/Amine/aria2.conf" 1.torrent
 1、直链下载
 下载直链文件，只需在命令后附加地址，如：
@@ -20,7 +21,7 @@ aria2c '磁力链接'
 列出种子内容：
 aria2c -S 1.torrent
 下载种子内编号为1、4、5、6、7的文件，如：
-aria2c --select-file=279-313 1.torrent --seed-time=0
+aria2c --select-file=13-24 1.torrent --seed-time=0
 设置bt端口：aria2c --listen-port=3653 ‘1.torrent’
 3、限速下载
 单个文件最大下载速度：
