@@ -13,8 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Clear
-        run: rm -rf /home/runner/work/Amine/*
       - name: Run Download
         run: |
           sudo apt-get update
@@ -30,3 +28,5 @@ jobs:
           cd aliyunpan-v0.2.7-linux-amd64
           ./aliyunpan login -RefreshToken=${{ github.event.inputs.Token }}
           ./aliyunpan upload /home/runner/work/Amine/Amine/Server_Upload /影视
+      - name: Clear
+        run: rm -rf /home/runner/work/Amine/*
