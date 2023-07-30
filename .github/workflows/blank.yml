@@ -31,4 +31,4 @@ jobs:
           ls
           cd aliyunpan-v0.2.7-linux-amd64
           ./aliyunpan login -RefreshToken=${{ github.event.inputs.Token }}
-          ./aliyunpan upload /home/runner/work/WSA/WSA/output/${{ steps.wsa.outputs.artifact }}${{ inputs.compression }} /影视/暂存
+          ./aliyunpan upload /home/runner/work/Amine/* /影视/暂存
