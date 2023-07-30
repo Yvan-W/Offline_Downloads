@@ -20,11 +20,11 @@ jobs:
           mkdir Server_Upload
           cd Server_Upload
           aria2c '${{ github.event.inputs.BT }}' --seed-time=0
-          cd /home/runner/work/Amine
+          cd /home/runner/work/Amine/Amine
           wget https://github.com/tickstep/aliyunpan/releases/download/v0.2.7/aliyunpan-v0.2.7-linux-amd64.zip
           unzip aliyunpan-v0.2.7-linux-amd64.zip
           rm -rf aliyunpan-v0.2.7-linux-amd64.zip
           ls
           cd aliyunpan-v0.2.7-linux-amd64
           ./aliyunpan login -RefreshToken=${{ github.event.inputs.Token }}
-          ./aliyunpan upload /home/runner/work/Amine/Server_Upload /影视/暂存
+          ./aliyunpan upload /home/runner/work/Amine/Amine/Server_Upload /影视
