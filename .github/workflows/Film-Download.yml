@@ -4,10 +4,10 @@ on:
     inputs:
       BT:
         description: '磁力链接'
-        required: true
+        required: false
       HTTP:
         description: '种子下载链接'
-        required: true
+        required: false
       Token:
         description: 'Aaliyuntoken'
         required: true
