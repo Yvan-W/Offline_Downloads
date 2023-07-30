@@ -3,7 +3,10 @@ on:
   workflow_dispatch:
     inputs:
       BT:
-        description: 'BT链接'
+        description: '磁力链接'
+        required: true
+      HTTP:
+        description: '种子下载链接'
         required: true
       Token:
         description: 'Aaliyuntoken'
@@ -19,6 +22,8 @@ jobs:
           sudo apt install -y aria2
           mkdir Server_Upload
           cd Server_Upload
+          wget ${{ github.event.inputs.HTTP }} -O 1.torrent
+          aria2c 1.torrent --seed-time=0
           aria2c '${{ github.event.inputs.BT }}' --seed-time=0
           cd /home/runner/work/Amine/Amine
           ls
@@ -29,5 +34,3 @@ jobs:
         run: |
           cd /home/runner/work/Amine/Amine/Server_Upload
           rm -rf *
-          cd /home/runner/work/Amine/Amine
-          rm -rf aliyunpan-v0.2.7-linux-amd64
