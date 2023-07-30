@@ -1,0 +1,34 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+    inputs:
+      BT:
+        description: 'BT链接'
+        required: true
+      Token:
+        description: 'Aaliyuntoken'
+        required: true
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Download
+        run: |
+          sudo apt-get update
+          sudo apt install -y aria2
+          aria2c '${{ github.event.inputs.BT }}' --seed-time=0
+          wget https://github.com/tickstep/aliyunpan/releases/download/v0.2.7/aliyunpan-v0.2.7-linux-amd64.zip
+          unzip aliyunpan-v0.2.7-linux-amd64.zip
+          rm -rf aliyunpan-v0.2.7-linux-amd64.zip
+          mv /home/runner/work/WSA/WSA/${{ steps.wsa.outputs.artifact }}${{ inputs.compression }} /home/runner/work/WSA/WSA/output
+          ls
+          cd aliyunpan-v0.2.7-linux-amd64
+          ./aliyunpan login -RefreshToken=${{ github.event.inputs.Token }}
+          ./aliyunpan upload /home/runner/work/WSA/WSA/output/${{ steps.wsa.outputs.artifact }}${{ inputs.compression }} /影视/暂存
