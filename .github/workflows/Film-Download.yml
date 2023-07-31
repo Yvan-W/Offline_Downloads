@@ -29,13 +29,10 @@ jobs:
             wget "${{ github.event.inputs.HTTP }}" -O 1.torrent
             aria2c 1.torrent --seed-time=0
           fi
-
-          cd /home/runner/work/Amine/Amine
+          rm -rf 1.torrent
           ls
-          cd aliyunpan-v0.2.7-linux-amd64
+          cd /home/runner/work/Amine/Amine/aliyunpan-v0.2.7-linux-amd64
           ./aliyunpan login -RefreshToken=${{ github.event.inputs.Token }}
           ./aliyunpan upload /home/runner/work/Amine/Amine/Server_Upload /影视
       - name: Cleanup Files
-        run: |
-          cd /home/runner/work/Amine/Amine/Server_Upload
-          rm -rf *
+        run: rm -rf /home/runner/work/Amine/Amine/Server_Upload
