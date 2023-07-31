@@ -26,7 +26,7 @@ jobs:
           if [ -n "${{ github.event.inputs.BT }}" ]; then
             aria2c '${{ github.event.inputs.BT }}' --seed-time=0
           else
-            wget ${{ github.event.inputs.HTTP }} -O 1.torrent
+            wget "${{ github.event.inputs.HTTP }}" -O 1.torrent
             aria2c 1.torrent --seed-time=0
           fi
 
