@@ -8,6 +8,9 @@ on:
       HTTP:
         description: '种子下载链接'
         required: false
+      choice:
+      description: 'BT文件选择 例: --select-file=2,4,5,10,12'
+      required: false
       Token:
         description: 'Aaliyuntoken'
         required: true
@@ -27,7 +30,7 @@ jobs:
             aria2c '${{ github.event.inputs.BT }}' --seed-time=0
           else
             wget "${{ github.event.inputs.HTTP }}" -O 1.torrent
-            aria2c 1.torrent --seed-time=0
+            aria2c 1.torrent --seed-time=0${{ github.event.inputs.choice }}
           fi
           rm -rf 1.torrent
           ls
