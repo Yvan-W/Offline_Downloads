@@ -22,9 +22,14 @@ jobs:
           sudo apt install -y aria2
           mkdir Server_Upload
           cd Server_Upload
-          wget ${{ github.event.inputs.HTTP }} -O 1.torrent
-          aria2c 1.torrent --seed-time=0
-          aria2c '${{ github.event.inputs.BT }}' --seed-time=0
+
+          if [ -n "${{ github.event.inputs.BT }}" ]; then
+            aria2c '${{ github.event.inputs.BT }}' --seed-time=0
+          else
+            wget ${{ github.event.inputs.HTTP }} -O 1.torrent
+            aria2c 1.torrent --seed-time=0
+          fi
+
           cd /home/runner/work/Amine/Amine
           ls
           cd aliyunpan-v0.2.7-linux-amd64
