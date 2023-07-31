@@ -9,8 +9,8 @@ on:
         description: '种子下载链接'
         required: false
       choice:
-      description: 'BT文件选择 例: --select-file=2,4,5,10,12'
-      required: false
+        description: 'BT文件选择 例: --select-file=2,4,5,10,12'
+        required: false
       Token:
         description: 'Aaliyuntoken'
         required: true
