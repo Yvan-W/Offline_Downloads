@@ -15,7 +15,7 @@ on:
         description: 'Aaliyuntoken'
         required: true
 jobs:
-  Runing:
+  Download:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -34,6 +34,7 @@ jobs:
           fi
           rm -rf 1.torrent
   Upload:
+    needs: Download
     runs-on: ubuntu-latest
     steps:
       - name: Run Upload
