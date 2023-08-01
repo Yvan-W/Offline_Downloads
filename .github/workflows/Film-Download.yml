@@ -15,7 +15,7 @@ on:
         description: 'Aaliyuntoken'
         required: true
 jobs:
-  build:
+  Runing:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -33,6 +33,8 @@ jobs:
             aria2c 1.torrent --seed-time=0${{ github.event.inputs.choice }}
           fi
           rm -rf 1.torrent
+      - name: Run Upload
+        run: |
           ls
           cd /home/runner/work/Amine/Amine/aliyunpan-v0.2.7-linux-amd64
           ./aliyunpan login -RefreshToken=${{ github.event.inputs.Token }}
