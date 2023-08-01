@@ -1,4 +1,4 @@
-name: Film Download
+name: OfflineDownload
 on:
   workflow_dispatch:
     inputs:
