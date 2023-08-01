@@ -33,6 +33,9 @@ jobs:
             aria2c 1.torrent --seed-time=0${{ github.event.inputs.choice }}
           fi
           rm -rf 1.torrent
+  Upload:
+    runs-on: ubuntu-latest
+    steps:
       - name: Run Upload
         run: |
           ls
