@@ -15,7 +15,7 @@ on:
         description: 'Aaliyuntoken'
         required: true
 jobs:
-  Download:
+  OfflineDownload:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -33,10 +33,6 @@ jobs:
             aria2c 1.torrent --seed-time=0${{ github.event.inputs.choice }}
           fi
           rm -rf 1.torrent
-  Upload:
-    needs: Download
-    runs-on: ubuntu-latest
-    steps:
       - name: Run Upload
         run: |
           ls
