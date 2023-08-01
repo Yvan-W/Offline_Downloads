@@ -19,13 +19,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Run Download
+      - name: Prepare
         run: |
           sudo apt-get update
           sudo apt install -y aria2
+      - name: Run Download
+        run: |
           mkdir Server_Upload
           cd Server_Upload
-
           if [ -n "${{ github.event.inputs.BT }}" ]; then
             aria2c '${{ github.event.inputs.BT }}' --seed-time=0
           else
