@@ -40,5 +40,6 @@ jobs:
           cd /home/runner/work/Amine/Amine/aliyunpan-v0.2.7-linux-amd64
           ./aliyunpan login -RefreshToken=${{ github.event.inputs.Token }}
           ./aliyunpan upload /home/runner/work/Amine/Amine/Server_Upload /影视
+          ./aliyunpan logout -y
       - name: Cleanup Files
         run: rm -rf /home/runner/work/Amine/Amine/Server_Upload
