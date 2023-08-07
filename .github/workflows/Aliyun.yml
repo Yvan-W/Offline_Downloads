@@ -1,4 +1,4 @@
-name: OfflineDownload
+name: Aliyun
 on:
   workflow_dispatch:
     inputs:
