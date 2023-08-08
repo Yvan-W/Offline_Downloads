@@ -1,4 +1,4 @@
-# Amine
+# Offline Downloads
 ## 通过GitHub action 实现了一些没有离线下载功能的云盘支持离线下载😂😂
 ### 支持云盘
 阿里云盘
@@ -10,6 +10,8 @@ OneDrive 国际版
 在浏览器地址栏中获取以 http://loaclhost 开头的整个url内容
 将获取的完整url内容替换命令中的 url 三个字母
 每次产生的 url 只能用一次, 重试请重新获取 url
+## 限制
+文件不可超过20G，种子可分段下
 ## 功能实现的贡献
 [@tickstep](https://github.com/tickstep/aliyunpan)
 、
