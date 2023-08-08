@@ -43,7 +43,7 @@ jobs:
           ls
           if [ -n "${{ github.event.inputs.Token-Onedrive }}" ]; then
             cd OnedriveCli
-            mv /home/runner/work/Offline_Downloads/Offline_Downloads/Server_Upload /home/runner/work/Offline_Downloads/Offline_Downloads/Onedrive
+            mv /home/runner/work/Offline_Downloads/Offline_Downloads/Server_Upload /home/runner/work/Offline_Downloads/Offline_Downloads/OnedriveCli
             chmod +x OneDriveUploader
             ./OneDriveUploader -a ${{ github.event.inputs.Token-Onedrive }}
             ./OneDriveUploader -t 20 -b 50 -s "Server_Upload"
