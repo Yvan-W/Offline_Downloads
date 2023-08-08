@@ -1,4 +1,4 @@
-name: Aliyun
+name: BiliBili Download
 on:
   workflow_dispatch:
     inputs:
@@ -12,7 +12,7 @@ on:
         description: 'Aaliyuntoken'
         required: false
       Token-Onedrive:
-        description: 'Onedrive-token [Login-Token](https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=78d4dc35-7e46-42c6-9023-2d39314433a5&response_type=code&redirect_uri=http://localhost/onedrive-login&response_mode=query&scope=offline_access%20User.Read%20Files.ReadWrite.All)'
+        description: 'Onedrive-token (参照README.md)'
         required: false
 jobs:
   OfflineDownload:
