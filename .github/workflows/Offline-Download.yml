@@ -46,7 +46,7 @@ jobs:
             mv /home/runner/work/Offline_Downloads/Offline_Downloads/Server_Upload /home/runner/work/Offline_Downloads/Offline_Downloads/Onedrive
             chmod +x OneDriveUploader
             ./OneDriveUploader -a ${{ github.event.inputs.Token-Onedrive }}
-            ./OneDriveUploader -s "Server_Upload"
+            ./OneDriveUploader -t 20 -b 50 -s "Server_Upload"
           else
             cd /home/runner/work/Offline_Downloads/Offline_Downloads/aliyunpan-v0.2.7-linux-amd64
             ./aliyunpan login -RefreshToken=${{ github.event.inputs.Token-Aliyun }}
