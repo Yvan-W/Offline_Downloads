@@ -1,0 +1,43 @@
+name: Aliyun
+on:
+  workflow_dispatch:
+    inputs:
+      BiliBili:
+        description: 'BiliBili链接'
+        required: true
+      Choice:
+        description: '分P选择(3、1,3,5、1-3、all)'
+        required: true
+      Token-Aliyun:
+        description: 'Aaliyuntoken'
+        required: false
+      Token-Onedrive:
+        description: 'Onedrive-token [Login-Token](https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=78d4dc35-7e46-42c6-9023-2d39314433a5&response_type=code&redirect_uri=http://localhost/onedrive-login&response_mode=query&scope=offline_access%20User.Read%20Files.ReadWrite.All)'
+        required: false
+jobs:
+  OfflineDownload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Prepare
+        run: |
+          sudo apt-get update
+          sudo apt install -y aria2
+      - name: Run Download
+        run: |
+          cd BiliBili
+          ./BBDown -c "SESSDATA=" -p ${{ github.event.inputs.Choice }} "${{ github.event.inputs.BiliBili }}"
+      - name: Run Upload
+        run: |
+          if [ -n "${{ github.event.inputs.Token-Onedrive }}" ]; then
+            cd Onedrive
+            mv /home/runner/work/Offline_Downloads/Offline_Downloads/Server_Upload /home/runner/work/Offline_Downloads/Offline_Downloads/Onedrive
+            chmod +x OneDriveUploader
+            ./OneDriveUploader -a ${{ github.event.inputs.Token-Onedrive }}
+            ./OneDriveUploader -s "Server_Upload"
+          else
+            cd /home/runner/work/Offline_Downloads/Offline_Downloads/aliyunpan-v0.2.7-linux-amd64
+            ./aliyunpan login -RefreshToken=${{ github.event.inputs.Token-Aliyun }}
+            ./aliyunpan upload /home/runner/work/Offline_Downloads/Offline_Downloads/Server_Upload /影视
+            ./aliyunpan logout -y
+          fi

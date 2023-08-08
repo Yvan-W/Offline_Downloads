@@ -11,9 +11,13 @@ on:
       choice:
         description: 'BT文件选择 例: --select-file=2,4,5,10,12'
         required: false
-      Token:
+      Token-Aliyun:
         description: 'Aaliyuntoken'
-        required: true
+        required: false
+      Token-Onedrive:
+        description: 'Onedrive-token [Login-Token](https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=78d4dc35-7e46-42c6-9023-2d39314433a5&response_type=code&redirect_uri=http://localhost/onedrive-login&response_mode=query&scope=offline_access%20User.Read%20Files.ReadWrite.All)'
+        required: false
+
 jobs:
   OfflineDownload:
     runs-on: ubuntu-latest
@@ -37,9 +41,16 @@ jobs:
       - name: Run Upload
         run: |
           ls
-          cd /home/runner/work/Amine/Amine/aliyunpan-v0.2.7-linux-amd64
-          ./aliyunpan login -RefreshToken=${{ github.event.inputs.Token }}
-          ./aliyunpan upload /home/runner/work/Amine/Amine/Server_Upload /影视
-          ./aliyunpan logout -y
-      - name: Cleanup Files
-        run: rm -rf /home/runner/work/Amine/Amine/Server_Upload
+          if [ -n "${{ github.event.inputs.Token-Onedrive }}" ]; then
+            cd Onedrive
+            mv /home/runner/work/Offline_Downloads/Offline_Downloads/Server_Upload /home/runner/work/Offline_Downloads/Offline_Downloads/Onedrive
+            chmod +x OneDriveUploader
+            ./OneDriveUploader -a ${{ github.event.inputs.Token-Onedrive }}
+            ./OneDriveUploader -s "Server_Upload"
+          else
+            cd /home/runner/work/Offline_Downloads/Offline_Downloads/aliyunpan-v0.2.7-linux-amd64
+            ./aliyunpan login -RefreshToken=${{ github.event.inputs.Token-Aliyun }}
+            ./aliyunpan upload /home/runner/work/Offline_Downloads/Offline_Downloads/Server_Upload /影视
+            ./aliyunpan logout -y
+          fi
+
