@@ -29,15 +29,15 @@ jobs:
           ./BBDown -c "SESSDATA=" -p ${{ github.event.inputs.Choice }} "${{ github.event.inputs.BiliBili }}"
       - name: Run Upload
         run: |
-          if [ -n "${{ github.event.inputs.Token-Onedrive }}" ]; then
-            cd OnedriveCli
-            mv /home/runner/work/Offline_Downloads/Offline_Downloads/Server_Upload /home/runner/work/Offline_Downloads/Offline_Downloads/OnedriveCli
-            chmod +x OneDriveUploader
-            ./OneDriveUploader -a ${{ github.event.inputs.Token-Onedrive }}
-            ./OneDriveUploader -t 20 -b 50 -s "Server_Upload"
-          else
+          ls
+          if [ -n "${{ github.event.inputs.Token-Aliyun }}" ]; then
             cd /home/runner/work/Offline_Downloads/Offline_Downloads/aliyunpan-v0.2.7-linux-amd64
             ./aliyunpan login -RefreshToken=${{ github.event.inputs.Token-Aliyun }}
             ./aliyunpan upload /home/runner/work/Offline_Downloads/Offline_Downloads/Server_Upload /影视
             ./aliyunpan logout -y
+          else
+            cd OnedriveCli
+            mv /home/runner/work/Offline_Downloads/Offline_Downloads/Server_Upload /home/runner/work/Offline_Downloads/Offline_Downloads/OnedriveCli
+            chmod +x OneDriveUploader
+            ./OneDriveUploader -s "Server_Upload"
           fi
