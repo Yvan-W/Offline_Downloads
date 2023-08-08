@@ -14,9 +14,6 @@ on:
       Token-Aliyun:
         description: 'Aaliyuntoken'
         required: false
-      Token-Onedrive:
-        description: 'Onedrive-token [Login-Token](参照README.md)'
-        required: false
 
 jobs:
   OfflineDownload:
@@ -45,8 +42,7 @@ jobs:
             cd OnedriveCli
             mv /home/runner/work/Offline_Downloads/Offline_Downloads/Server_Upload /home/runner/work/Offline_Downloads/Offline_Downloads/OnedriveCli
             chmod +x OneDriveUploader
-            ./OneDriveUploader -a ${{ github.event.inputs.Token-Onedrive }}
-            ./OneDriveUploader -t 20 -b 50 -s "Server_Upload"
+            ./OneDriveUploader -s "Server_Upload"
           else
             cd /home/runner/work/Offline_Downloads/Offline_Downloads/aliyunpan-v0.2.7-linux-amd64
             ./aliyunpan login -RefreshToken=${{ github.event.inputs.Token-Aliyun }}
