@@ -3,10 +3,10 @@ on:
   workflow_dispatch:
     inputs:
       BT:
-        description: '磁力链接'
+        description: '磁力链接或文件直链'
         required: false
       HTTP:
-        description: '种子下载链接'
+        description: '种子下载直链链接'
         required: false
       choice:
         description: 'BT文件选择 例: --select-file=2,4,5,10,12'
