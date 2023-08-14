@@ -14,6 +14,9 @@ on:
       Token-Aliyun:
         description: 'Aaliyuntoken'
         required: false
+      OnedriveDir:
+        description: 'Onedrive上传路径'
+        required: false
 
 jobs:
   OfflineDownload:
@@ -47,5 +50,9 @@ jobs:
             cd OnedriveCli
             mv /home/runner/work/Offline_Downloads/Offline_Downloads/Server_Upload /home/runner/work/Offline_Downloads/Offline_Downloads/OnedriveCli
             chmod +x OneDriveUploader
-            ./OneDriveUploader -s "Server_Upload"
+            if [ -n "${{ github.event.inputs.OnedriveDir }}" ]; then
+              ./OneDriveUploader -s "${{ github.event.inputs.OnedriveDir }}"
+            else
+              ./OneDriveUploader -s "Server_Upload"
+            fi  
           fi
