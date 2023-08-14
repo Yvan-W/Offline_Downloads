@@ -51,7 +51,7 @@ jobs:
             mv /home/runner/work/Offline_Downloads/Offline_Downloads/Server_Upload /home/runner/work/Offline_Downloads/Offline_Downloads/OnedriveCli
             chmod +x OneDriveUploader
             if [ -n "${{ github.event.inputs.OnedriveDir }}" ]; then
-              ./OneDriveUploader -s "${{ github.event.inputs.OnedriveDir }}"
+              ./OneDriveUploader -s "Server_Upload" -r "${{ github.event.inputs.OnedriveDir }}"
             else
               ./OneDriveUploader -s "Server_Upload"
             fi  
