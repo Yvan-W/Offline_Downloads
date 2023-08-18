@@ -2,6 +2,11 @@ name: Offline Download
 on:
   workflow_dispatch:
     inputs:
+      Tool:
+        description: '下载器'
+        required: true
+        options: [aria, transmission]
+        default: aria
       BT:
         description: '磁力链接或文件直链'
         required: false
@@ -27,15 +32,24 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt install -y aria2
+          sudo apt install -y transmission-cli
       - name: Run Download
         run: |
           mkdir Server_Upload
           cd Server_Upload
           if [ -n "${{ github.event.inputs.BT }}" ]; then
-            aria2c '${{ github.event.inputs.BT }}' --seed-time=0
+            if [[ "${{ inputs.Tool }}" == *aria* ]]; then
+                aria2c '${{ github.event.inputs.BT }}' --seed-time=0
+            else
+                transmission-cli "${{ github.event.inputs.BT }}"
+            fi
           else
-            wget "${{ github.event.inputs.HTTP }}" -O 1.torrent
-            aria2c 1.torrent --seed-time=0${{ github.event.inputs.choice }}
+            if [[ "${{ inputs.Tool }}" == *aria* ]]; then
+                wget "${{ github.event.inputs.HTTP }}" -O 1.torrent
+                aria2c 1.torrent --seed-time=0${{ github.event.inputs.choice }}
+            else
+                transmission-cli "${{ github.event.inputs.HTTP }}"
+            fi
           fi
           rm -rf 1.torrent
       - name: Run Upload
