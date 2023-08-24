@@ -59,9 +59,9 @@ jobs:
               wget "${{ github.event.inputs.HTTP }}" -O 1.torrent
               aria2c 1.torrent --seed-time=0${{ github.event.inputs.choice }}
               if [[ "${{ inputs.tracker }}" == *true* ]]; then
-                aria2c 1.torrent --bt-tracker-file=/home/runner/work/Offline_Downloads/Offline_Downloads/aria/tracker_list.txt --seed-time=0${{ github.event.inputs.choice }} --allow-overwrite=true --max-connection-per-server=16 -x64
+                aria2c 1.torrent --bt-tracker-file=/home/runner/work/Offline_Downloads/Offline_Downloads/aria/tracker_list.txt --seed-time=0${{ github.event.inputs.choice }} --allow-overwrite=true --max-connection-per-server=16
               else
-                aria2c 1.torrent --seed-time=0${{ github.event.inputs.choice }} --allow-overwrite=true --max-connection-per-server=16 -x64
+                aria2c 1.torrent --seed-time=0${{ github.event.inputs.choice }} --allow-overwrite=true --max-connection-per-server=16
               fi
             else
               transmission-cli "${{ github.event.inputs.HTTP }}"
