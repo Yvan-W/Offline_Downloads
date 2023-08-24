@@ -3,11 +3,13 @@ on:
   workflow_dispatch:
     inputs:
       Tool:
+        type: choice
         description: '下载器'
         required: true
         options: [aria, transmission]
         default: aria
       tracker:
+        type: choice
         description: 'aria是否自定义tracker'
         required: true
         options: [true, false]
