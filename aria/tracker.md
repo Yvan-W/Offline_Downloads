@@ -12,7 +12,7 @@ bash <(curl -fsSL git.io/tracker.sh)
 
 - 指定 Aria2 配置文件路径，比如配置文件在`/root/.aria2/aria2.conf`：
 ```
-bash <(curl -fsSL git.io/tracker.sh) "/root/.aria2/aria2.conf"
+bash <(curl -fsSL git.io/tracker.sh) "tracker_list.txt"
 ```
 
 - 通过 RPC 方式给远程 Aria2 更新 BT tracker 列表。

@@ -7,12 +7,11 @@ on:
         required: true
         options: [aria, transmission]
         default: aria
-      conf:
-        description: 'aria是否使用配置文件'
+      tracker:
+        description: 'aria是否自定义tracker'
         required: true
         options: [true, false]
         default: true
-
       BT:
         description: '磁力链接或文件直链'
         required: false
@@ -45,10 +44,10 @@ jobs:
           cd Server_Upload
           if [ -n "${{ github.event.inputs.BT }}" ]; then
             if [[ "${{ inputs.Tool }}" == *aria* ]]; then
-              if [[ "${{ inputs.conf }}" == *true* ]]; then
-                aria2c '${{ github.event.inputs.BT }}' --conf-path="/home/runner/work/Offline_Downloads/Offline_Downloads/aria/aria2.conf" --seed-time=0
+              if [[ "${{ inputs.tracker }}" == *true* ]]; then
+                aria2c '${{ github.event.inputs.BT }}' --bt-tracker-file=/home/runner/work/Offline_Downloads/Offline_Downloads/aria/tracker_list.txt --seed-time=0 --allow-overwrite=true --max-connection-per-server=16 -x64
               else
-                aria2c '${{ github.event.inputs.BT }}' --seed-time=0
+                aria2c '${{ github.event.inputs.BT }}' --seed-time=0 --allow-overwrite=true --max-connection-per-server=16 -x64
               fi
             else
               transmission-cli "${{ github.event.inputs.BT }}"
@@ -57,10 +56,10 @@ jobs:
             if [[ "${{ inputs.Tool }}" == *aria* ]]; then
               wget "${{ github.event.inputs.HTTP }}" -O 1.torrent
               aria2c 1.torrent --seed-time=0${{ github.event.inputs.choice }}
-              if [[ "${{ inputs.conf }}" == *true* ]]; then
-                aria2c 1.torrent --conf-path="/home/runner/work/Offline_Downloads/Offline_Downloads/aria/aria2.conf" --seed-time=0${{ github.event.inputs.choice }}
+              if [[ "${{ inputs.tracker }}" == *true* ]]; then
+                aria2c 1.torrent --bt-tracker-file=/home/runner/work/Offline_Downloads/Offline_Downloads/aria/tracker_list.txt --seed-time=0${{ github.event.inputs.choice }} --allow-overwrite=true --max-connection-per-server=16 -x64
               else
-                aria2c 1.torrent --seed-time=0${{ github.event.inputs.choice }}
+                aria2c 1.torrent --seed-time=0${{ github.event.inputs.choice }} --allow-overwrite=true --max-connection-per-server=16 -x64
               fi
             else
               transmission-cli "${{ github.event.inputs.HTTP }}"
