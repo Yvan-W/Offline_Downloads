@@ -47,9 +47,9 @@ jobs:
           if [ -n "${{ github.event.inputs.BT }}" ]; then
             if [[ "${{ inputs.Tool }}" == *aria* ]]; then
               if [[ "${{ inputs.tracker }}" == *true* ]]; then
-                aria2c '${{ github.event.inputs.BT }}' --bt-tracker-file=/home/runner/work/Offline_Downloads/Offline_Downloads/aria/tracker_list.txt --seed-time=0 --allow-overwrite=true --max-connection-per-server=16 -x64
+                aria2c '${{ github.event.inputs.BT }}' --bt-tracker-file=/home/runner/work/Offline_Downloads/Offline_Downloads/aria/tracker_list.txt --seed-time=0 --allow-overwrite=true --max-connection-per-server=16
               else
-                aria2c '${{ github.event.inputs.BT }}' --seed-time=0 --allow-overwrite=true --max-connection-per-server=16 -x64
+                aria2c '${{ github.event.inputs.BT }}' --seed-time=0 --allow-overwrite=true --max-connection-per-server=16
               fi
             else
               transmission-cli "${{ github.event.inputs.BT }}"
