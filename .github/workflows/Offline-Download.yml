@@ -40,11 +40,10 @@ jobs:
         run: |
           df -h
           docker rmi `docker images -q`
-          sudo apt-get -y purge $(dpkg -l | grep -E '^ii.*python' | awk '{print $2}')
-          sudo rm -rf /var/log/*
-          sudo rm -rf /tmp/* && sudo rm -rf /var/tmp/*
           sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
-          sudo apt-get update
+          sudo -E apt-mark hold grub-efi-amd64-signed
+          sudo -E apt update
+          sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* powershell* openjdk* mysql* php* mongodb* dotnet* moby* snap*
           sudo -E systemctl daemon-reload
           sudo -E apt -y autoremove --purge
           sudo -E apt clean
