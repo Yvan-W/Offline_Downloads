@@ -32,7 +32,7 @@ on:
 
 jobs:
   OfflineDownload:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - name: Space cleanup and Initialization environment
         env:
