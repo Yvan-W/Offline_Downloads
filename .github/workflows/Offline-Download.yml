@@ -56,7 +56,8 @@ jobs:
             if [[ "${{ inputs.Tool }}" == *aria* ]]; then
               sudo apt install -y aria2
               if [[ "${{ inputs.tracker }}" == *true* ]]; then
-                aria2c '${{ github.event.inputs.BT }}' --bt-tracker-file=/home/runner/work/Offline_Downloads/Offline_Downloads/aria/tracker_list.txt --seed-time=0 --max-connection-per-server=16
+                aria2.tracker=$(cat "/home/runner/work/Offline_Downloads/Offline_Downloads/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')
+                aria2c '${{ github.event.inputs.BT }}' --bt-tracker="${{ aria2.tracker }}" --seed-time=0 --max-connection-per-server=16
               else
                 aria2c '${{ github.event.inputs.BT }}' --seed-time=0 --max-connection-per-server=16
               fi
@@ -69,7 +70,8 @@ jobs:
               sudo apt install -y aria2
               wget "${{ github.event.inputs.HTTP }}" -O 1.torrent
               if [[ "${{ inputs.tracker }}" == *true* ]]; then
-                aria2c 1.torrent --bt-tracker-file=/home/runner/work/Offline_Downloads/Offline_Downloads/aria/tracker_list.txt --seed-time=0${{ github.event.inputs.choice }} --max-connection-per-server=16
+                aria2.tracker=$(cat "/home/runner/work/Offline_Downloads/Offline_Downloads/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')
+                aria2c 1.torrent --bt-tracker="${{ aria2.tracker }}" --seed-time=0${{ github.event.inputs.choice }} --max-connection-per-server=16
               else
                 aria2c 1.torrent --seed-time=0${{ github.event.inputs.choice }} --max-connection-per-server=16
               fi
