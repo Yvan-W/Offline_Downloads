@@ -12,7 +12,7 @@ OneDrive 国际版
 ##### ./OneDriveUploader -a 你获取的url
 ##### 请自行将获取自动生成的auth.json上传至OnedriveCli目录后可直接在action填入信息使用
 ## 限制
-文件不可超过20G，种子可分段下
+文件不可超过46G，种子可分段下
 ## 功能实现的贡献
 [@tickstep](https://github.com/tickstep/aliyunpan)
 、
