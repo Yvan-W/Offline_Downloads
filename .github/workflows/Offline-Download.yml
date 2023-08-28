@@ -39,6 +39,7 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
         run: |
           df -h
+          dpkg -l
           docker rmi `docker images -q`
           sudo apt-get -y purge $(dpkg -l | grep -E '^ii.*python' | awk '{print $2}')
           sudo rm -rf /var/log/*
