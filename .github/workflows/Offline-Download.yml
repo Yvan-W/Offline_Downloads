@@ -34,12 +34,19 @@ jobs:
   OfflineDownload:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Prepare
+      - name: Space cleanup and Initialization environment
+        env:
+          DEBIAN_FRONTEND: noninteractive
         run: |
+          docker rmi `docker images -q`
+          sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
           sudo apt-get update
           sudo apt install -y aria2
           sudo apt install -y transmission-cli
+          sudo -E systemctl daemon-reload
+          sudo -E apt -y autoremove --purge
+          sudo -E apt clean
+      - uses: actions/checkout@v3
       - name: Run Download
         run: |
           mkdir Server_Upload
