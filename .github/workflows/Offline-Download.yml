@@ -39,15 +39,13 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
         run: |
           df -h
-          dpkg -l
           docker rmi `docker images -q`
+          sudo apt-get -y remove vcpkg cmake docker-compose heroku kubectl minikube packer mysql-client
           sudo apt-get -y purge $(dpkg -l | grep -E '^ii.*python' | awk '{print $2}')
           sudo rm -rf /var/log/*
           sudo rm -rf /tmp/* && sudo rm -rf /var/tmp/*
           sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
           sudo apt-get update
-          sudo apt install -y aria2
-          sudo apt install -y transmission-cli
           sudo -E systemctl daemon-reload
           sudo -E apt -y autoremove --purge
           sudo -E apt clean
@@ -59,16 +57,19 @@ jobs:
           cd Server_Upload
           if [ -n "${{ github.event.inputs.BT }}" ]; then
             if [[ "${{ inputs.Tool }}" == *aria* ]]; then
+              sudo apt install -y aria2
               if [[ "${{ inputs.tracker }}" == *true* ]]; then
                 aria2c '${{ github.event.inputs.BT }}' --bt-tracker-file=/home/runner/work/Offline_Downloads/Offline_Downloads/aria/tracker_list.txt --seed-time=0 --max-connection-per-server=16
               else
                 aria2c '${{ github.event.inputs.BT }}' --seed-time=0 --max-connection-per-server=16
               fi
             else
+              sudo apt install -y transmission-cli
               transmission-cli "${{ github.event.inputs.BT }}"
             fi
           else
             if [[ "${{ inputs.Tool }}" == *aria* ]]; then
+              sudo apt install -y aria2
               wget "${{ github.event.inputs.HTTP }}" -O 1.torrent
               if [[ "${{ inputs.tracker }}" == *true* ]]; then
                 aria2c 1.torrent --bt-tracker-file=/home/runner/work/Offline_Downloads/Offline_Downloads/aria/tracker_list.txt --seed-time=0${{ github.event.inputs.choice }} --max-connection-per-server=16
@@ -76,6 +77,7 @@ jobs:
                 aria2c 1.torrent --seed-time=0${{ github.event.inputs.choice }} --max-connection-per-server=16
               fi
             else
+              sudo apt install -y transmission-cli
               transmission-cli "${{ github.event.inputs.HTTP }}"
             fi
           fi
