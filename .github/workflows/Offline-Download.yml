@@ -40,7 +40,7 @@ jobs:
         run: |
           df -h
           docker rmi `docker images -q`
-          sudo apt-get -y purge $(dpkg -l | awk '/^ii/ {print $2}' | grep -v '^wget$')
+          sudo apt-get -y purge $(comm -23 <(dpkg-query -W --showformat='${Package}\n' | sort) <(apt-mark showmanual | sort) | grep -v '^wget$')
           sudo rm -rf /var/log/*
           sudo rm -rf /tmp/* && sudo rm -rf /var/tmp/*
           sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
