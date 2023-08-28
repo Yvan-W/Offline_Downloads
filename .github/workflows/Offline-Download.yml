@@ -40,7 +40,6 @@ jobs:
         run: |
           df -h
           docker rmi `docker images -q`
-          sudo apt-get -y remove vcpkg cmake docker-compose heroku kubectl minikube packer mysql-client
           sudo apt-get -y purge $(dpkg -l | grep -E '^ii.*python' | awk '{print $2}')
           sudo rm -rf /var/log/*
           sudo rm -rf /tmp/* && sudo rm -rf /var/tmp/*
