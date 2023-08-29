@@ -78,7 +78,10 @@ jobs:
               transmission-cli "${{ github.event.inputs.HTTP }}"
             fi
           fi
+          ls
           rm -rf 1.torrent
+          rm -rf *.aria
+          ls
           df -h
       - name: Run Upload
         run: |
