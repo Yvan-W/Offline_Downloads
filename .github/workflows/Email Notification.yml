@@ -1,0 +1,21 @@
+name: Email Notification
+
+on:
+  workflow_run:
+    workflows: ["Your Workflow Name"]
+    types:
+      - completed
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Email Notification
+        env:
+          SMTP_SERVER: smtp.office365.com
+          SMTP_PORT: 587
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          TO_EMAIL: ${{ secrets.TO_EMAIL }}
+        run: |
+          echo "Subject: GitHub Action: Workflow completed successfully!" | sendmail -f $SMTP_USERNAME $TO_EMAIL
