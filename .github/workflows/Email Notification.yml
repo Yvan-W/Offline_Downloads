@@ -33,7 +33,7 @@ jobs:
           SMTP_PASSWORD = os.environ["SMTP_PASSWORD"]
           TO_EMAIL = os.environ["TO_EMAIL"] 
           
-          msg = MIMEText("GitHub Action: Workflow completed successfully!")
+          msg = MIMEText("GitHub Action: Workflow completed successfully! 恭喜您的文件已经下载完成并完成上传")
           msg["Subject"] = "GitHub Action Notification"
           msg["From"] = SMTP_USERNAME
           msg["To"] = TO_EMAIL
