@@ -2,7 +2,7 @@ name: Email Notification
 
 on:
   workflow_run:
-    workflows: ["Your Workflow Name"]
+    workflows: ["Offline Download"]
     types:
       - completed
 
