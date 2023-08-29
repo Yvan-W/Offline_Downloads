@@ -17,8 +17,8 @@ jobs:
 
       - name: Send Email Notification
         env:
-          SMTP_SERVER: smtp.office365.com
-          SMTP_PORT: 587
+          SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
           SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           TO_EMAIL: ${{ secrets.TO_EMAIL }}
@@ -26,7 +26,13 @@ jobs:
           python - <<EOF
           import smtplib
           from email.mime.text import MIMEText
-
+          import os
+          SMTP_SERVER = os.environ["SMTP_SERVER"]
+          SMTP_PORT = os.environ["SMTP_PORT"]
+          SMTP_USERNAME = os.environ["SMTP_USERNAME"]
+          SMTP_PASSWORD = os.environ["SMTP_PASSWORD"]
+          TO_EMAIL = os.environ["TO_EMAIL"] 
+          
           msg = MIMEText("GitHub Action: Workflow completed successfully!")
           msg["Subject"] = "GitHub Action Notification"
           msg["From"] = SMTP_USERNAME
