@@ -5,11 +5,15 @@ on:
     workflows: ["Offline Download"]
     types:
       - completed
-
 jobs:
   send-email:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
       - name: Send Email Notification
         env:
           SMTP_SERVER: smtp.office365.com
@@ -18,4 +22,18 @@ jobs:
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           TO_EMAIL: ${{ secrets.TO_EMAIL }}
         run: |
-          echo "Subject: GitHub Action: Workflow completed successfully!" | sendmail -f $SMTP_USERNAME $TO_EMAIL
+          python - <<EOF
+          import smtplib
+          from email.mime.text import MIMEText
+
+          msg = MIMEText("GitHub Action: Workflow completed successfully!")
+          msg["Subject"] = "GitHub Action Notification"
+          msg["From"] = SMTP_USERNAME
+          msg["To"] = TO_EMAIL
+
+          server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+          server.starttls()
+          server.login(SMTP_USERNAME, SMTP_PASSWORD)
+          server.sendmail(SMTP_USERNAME, [TO_EMAIL], msg.as_string())
+          server.quit()
+          EOF
