@@ -34,7 +34,7 @@ jobs:
   OfflineDownload:
     runs-on: ubuntu-latest
     steps:
-      - name: Space cleanup and Initialization environment
+      - name: Space cleanup
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
@@ -48,7 +48,7 @@ jobs:
           sudo -E apt clean
           df -h
       - uses: actions/checkout@v3
-      - name: Run Download
+      - name: Download
         run: |
           mkdir Server_Upload
           cd Server_Upload
@@ -83,7 +83,7 @@ jobs:
           rm -rf *.aria
           ls
           df -h
-      - name: Run Upload
+      - name: Upload
         run: |
           ls
           if [ -n "${{ github.event.inputs.Token-Aliyun }}" ]; then
