@@ -14,6 +14,12 @@ on:
         required: true
         options: [true, false]
         default: true
+      clear:
+        type: choice
+        description: '是否清理 清理最大支持65G，不清理仅有22G'
+        required: false
+        options: [true, false]
+        default: true
       BT:
         description: '磁力链接或文件直链'
         required: false
@@ -38,15 +44,18 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          df -h
-          docker rmi `docker images -q`
-          sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
-          sudo -E apt update
-          sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* powershell* openjdk* mysql* php* mongodb* dotnet* snap*
-          sudo -E systemctl daemon-reload
-          sudo -E apt -y autoremove --purge
-          sudo -E apt clean
-          df -h
+          if [[ "${{ inputs.clear }}" == *true* ]]; then
+            df -h
+            docker rmi `docker images -q`
+            sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
+            sudo -E apt update
+            sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* powershell* openjdk* mysql* php* mongodb* dotnet* snap*
+            sudo -E systemctl daemon-reload
+            sudo -E apt -y autoremove --purge
+            sudo -E apt clean
+          else
+            df -h
+          fi
       - uses: actions/checkout@v3
       - name: Download
         run: |
