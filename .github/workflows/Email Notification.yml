@@ -1,5 +1,4 @@
 name: Email Notification
-
 on:
   workflow_run:
     workflows: ["Offline Download"]
@@ -13,7 +12,6 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.x
-
       - name: Send Email Notification
         env:
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
@@ -31,12 +29,10 @@ jobs:
           SMTP_USERNAME = os.environ["SMTP_USERNAME"]
           SMTP_PASSWORD = os.environ["SMTP_PASSWORD"]
           TO_EMAIL = os.environ["TO_EMAIL"] 
-          
           msg = MIMEText("GitHub Action: Workflow completed successfully! 恭喜您的文件已经下载完成并完成上传")
           msg["Subject"] = "GitHub Action Notification"
           msg["From"] = SMTP_USERNAME
           msg["To"] = TO_EMAIL
-
           server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
           server.starttls()
           server.login(SMTP_USERNAME, SMTP_PASSWORD)
