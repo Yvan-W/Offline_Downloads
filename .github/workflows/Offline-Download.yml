@@ -32,7 +32,7 @@ on:
       Seed:
         description: '自定义播种时间(min) 0为不播种，建议播种，人人为我我为人人'
         required: true
-        default: true
+        default: 60
 
       Token-Aliyun:
         description: 'Aaliyuntoken'
