@@ -27,8 +27,13 @@ on:
         description: '种子下载直链链接'
         required: false
       choice:
-        description: 'BT文件选择 例: --select-file=2,4,5,10,12'
+        description: 'BT文件选择 注意实例空格，只支持种子例: --select-file=2,4,5,10,12'
         required: false
+      Seed:
+        description: '自定义播种时间(min) 0为不播种，建议播种，人人为我我为人人'
+        required: true
+        default: true
+
       Token-Aliyun:
         description: 'Aaliyuntoken'
         required: false
@@ -66,9 +71,9 @@ jobs:
             if [[ "${{ inputs.Tool }}" == *aria* ]]; then
               sudo apt install -y aria2
               if [[ "${{ inputs.tracker }}" == *true* ]]; then
-                aria2c '${{ github.event.inputs.BT }}' --bt-tracker="$(cat "/home/runner/work/Offline_Downloads/Offline_Downloads/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=0 --max-connection-per-server=16
+                aria2c '${{ github.event.inputs.BT }}' --bt-tracker="$(cat "/home/runner/work/Offline_Downloads/Offline_Downloads/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=${{ github.event.inputs.Seed }} --max-connection-per-server=16
               else
-                aria2c '${{ github.event.inputs.BT }}' --seed-time=0 --max-connection-per-server=16
+                aria2c '${{ github.event.inputs.BT }}' --seed-time=${{ github.event.inputs.Seed }} --max-connection-per-server=16
               fi
             else
               sudo apt install -y transmission-cli
@@ -79,9 +84,9 @@ jobs:
               sudo apt install -y aria2
               wget "${{ github.event.inputs.HTTP }}" -O 1.torrent
               if [[ "${{ inputs.tracker }}" == *true* ]]; then
-                aria2c 1.torrent --bt-tracker="$(cat "/home/runner/work/Offline_Downloads/Offline_Downloads/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=0${{ github.event.inputs.choice }} --max-connection-per-server=16
+                aria2c 1.torrent --bt-tracker="$(cat "/home/runner/work/Offline_Downloads/Offline_Downloads/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=${{ github.event.inputs.Seed }}${{ github.event.inputs.choice }} --max-connection-per-server=16
               else
-                aria2c 1.torrent --seed-time=0${{ github.event.inputs.choice }} --max-connection-per-server=16
+                aria2c 1.torrent --seed-time=${{ github.event.inputs.Seed }}${{ github.event.inputs.choice }} --max-connection-per-server=16
               fi
             else
               sudo apt install -y transmission-cli
