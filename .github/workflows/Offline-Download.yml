@@ -95,7 +95,7 @@ jobs:
           fi
           ls
           rm -rf 1.torrent
-          rm -rf *.aria
+          rm -rf *.aria2
           ls
           df -h
       - name: Upload
