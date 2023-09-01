@@ -18,9 +18,8 @@ GET_TRACKERS() {
     if [[ -z "${CUSTOM_TRACKER_URL}" ]]; then
         echo && echo -e "$(DATE_TIME) ${INFO} Get BT trackers..."
         TRACKER=$(
-            ${DOWNLOADER} https://trackerslist.com/all_aria2.txt ||
-                ${DOWNLOADER} https://cdn.staticaly.com/gh/XIU2/TrackersListCollection@master/all_aria2.txt ||
-                ${DOWNLOADER} https://trackers.p3terx.com/all_aria2.txt
+            ${DOWNLOADER} https://gitea.com/XIU2/TrackersListCollection/raw/branch/master/best_aria2.txt ||
+                ${DOWNLOADER} https://gitea.com/XIU2/TrackersListCollection/raw/branch/master/http_aria2.txt
         )
     else
         echo && echo -e "$(DATE_TIME) ${INFO} Get BT trackers from url(s):${CUSTOM_TRACKER_URL} ..."
@@ -51,48 +50,10 @@ ADD_TRACKERS() {
         echo -e "$(DATE_TIME) ${ERROR} '${ARIA2_CONF}' does not exist."
         exit 1
     else
-        [ -z $(grep "bt-tracker=" ${ARIA2_CONF}) ] && echo "bt-tracker=" >>${ARIA2_CONF}
-        sed -i "s@^\(bt-tracker=\).*@\1${TRACKER}@" ${ARIA2_CONF} && echo -e "$(DATE_TIME) ${INFO} BT trackers successfully added to Aria2 configuration file !"
+        echo "${TRACKER}" > "${ARIA2_CONF}" && echo -e "$(DATE_TIME) ${INFO} BT trackers successfully added to Aria2 configuration file !"
     fi
 }
 
-ADD_TRACKERS_RPC() {
-    if [[ "${RPC_SECRET}" ]]; then
-        RPC_PAYLOAD='{"jsonrpc":"2.0","method":"aria2.changeGlobalOption","id":"P3TERX","params":["token:'${RPC_SECRET}'",{"bt-tracker":"'${TRACKER}'"}]}'
-    else
-        RPC_PAYLOAD='{"jsonrpc":"2.0","method":"aria2.changeGlobalOption","id":"P3TERX","params":[{"bt-tracker":"'${TRACKER}'"}]}'
-    fi
-    curl "${RPC_ADDRESS}" -fsSd "${RPC_PAYLOAD}" || curl "https://${RPC_ADDRESS}" -kfsSd "${RPC_PAYLOAD}"
-}
-
-ADD_TRACKERS_RPC_STATUS() {
-    RPC_RESULT=$(ADD_TRACKERS_RPC)
-    [[ $(echo ${RPC_RESULT} | grep OK) ]] &&
-        echo -e "$(DATE_TIME) ${INFO} BT trackers successfully added to Aria2 !" ||
-        echo -e "$(DATE_TIME) ${ERROR} Network failure or Aria2 RPC interface error!"
-}
-
-ADD_TRACKERS_REMOTE_RPC() {
-    echo -e "$(DATE_TIME) ${INFO} Adding BT trackers to remote Aria2: ${LIGHT_PURPLE_FONT_PREFIX}${RPC_ADDRESS%/*}${FONT_COLOR_SUFFIX} ..." && echo
-    ADD_TRACKERS_RPC_STATUS
-}
-
-ADD_TRACKERS_LOCAL_RPC() {
-    if [ ! -f ${ARIA2_CONF} ]; then
-        echo -e "$(DATE_TIME) ${ERROR} '${ARIA2_CONF}' does not exist."
-        exit 1
-    else
-        RPC_PORT=$(grep ^rpc-listen-port ${ARIA2_CONF} | cut -d= -f2-)
-        RPC_SECRET=$(grep ^rpc-secret ${ARIA2_CONF} | cut -d= -f2-)
-        [[ ${RPC_PORT} ]] || {
-            echo -e "$(DATE_TIME) ${ERROR} Aria2 configuration file incomplete."
-            exit 1
-        }
-        RPC_ADDRESS="localhost:${RPC_PORT}/jsonrpc"
-        echo -e "$(DATE_TIME) ${INFO} Adding BT trackers to Aria2 ..." && echo
-        ADD_TRACKERS_RPC_STATUS
-    fi
-}
 
 [ $(command -v curl) ] || {
     echo -e "$(DATE_TIME) ${ERROR} curl is not installed."
@@ -102,18 +63,6 @@ ADD_TRACKERS_LOCAL_RPC() {
 if [ "$1" = "cat" ]; then
     GET_TRACKERS
     ECHO_TRACKERS
-elif [ "$1" = "RPC" ]; then
-    RPC_ADDRESS="$2/jsonrpc"
-    RPC_SECRET="$3"
-    GET_TRACKERS
-    ECHO_TRACKERS
-    ADD_TRACKERS_REMOTE_RPC
-elif [ "$2" = "RPC" ]; then
-    GET_TRACKERS
-    ECHO_TRACKERS
-    ADD_TRACKERS
-    echo
-    ADD_TRACKERS_LOCAL_RPC
 else
     GET_TRACKERS
     ECHO_TRACKERS
