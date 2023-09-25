@@ -34,11 +34,14 @@ on:
         required: true
         default: 60
 
-      Token-Aliyun:
-        description: 'Aaliyuntoken'
-        required: false
+      UploadDisk:
+        type: choice
+        description: '阿里云盘或Onedrive'
+        required: true
+        options: [Aliyun, Onedrive]
+        default: Aliyun
       OnedriveDir:
-        description: 'Onedrive上传路径'
+        description: 'Onedrive自定义上传路径'
         required: false
 
 jobs:
@@ -105,9 +108,9 @@ jobs:
       - name: Upload
         run: |
           ls
-          if [ -n "${{ github.event.inputs.Token-Aliyun }}" ]; then
+          if [[ "${{ inputs.UploadDisk }}" == *Aliyun* ]]; then
             cd /home/runner/work/Offline_Downloads/Offline_Downloads/aliyunpan-v0.2.7-linux-amd64
-            ./aliyunpan login -RefreshToken=${{ github.event.inputs.Token-Aliyun }}
+            ./aliyunpan login -RefreshToken=${{ secrets.ALIYUNTOKEN }}
             ./aliyunpan upload /home/runner/work/Offline_Downloads/Offline_Downloads/Server_Upload /影视
             ./aliyunpan logout -y
           else
