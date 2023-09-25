@@ -2,18 +2,6 @@ name: Offline Download
 on:
   workflow_dispatch:
     inputs:
-      Tool:
-        type: choice
-        description: '下载器'
-        required: true
-        options: [aria, transmission]
-        default: aria
-      tracker:
-        type: choice
-        description: 'aria是否自定义tracker'
-        required: true
-        options: [true, false]
-        default: true
       clear:
         type: choice
         description: '是否清理 清理最大支持46G，不清理仅有22G'
@@ -26,12 +14,26 @@ on:
       HTTP:
         description: '种子下载直链链接'
         required: false
+      Tool:
+        type: choice
+        description: '下载器'
+        required: true
+        options: [aria, transmission]
+        default: aria
+      tracker:
+        type: choice
+        description: 'aria是否自定义tracker'
+        required: true
+        options: [true, false]
+        default: true
       choice:
-        description: 'BT文件选择 注意实例空格，只支持种子例: --select-file=2,4,5,10,12'
+        description: 'aria BT文件选择 注意实例空格，只支持种子例: --select-file=2,4,5,10,12'
         required: false
       Seed:
-        description: '自定义播种时间(min) 0为不播种，建议播种，人人为我我为人人'
+        type: choice
+        description: 'aria 自定义播种时间(min) 0为不播种，建议播种，人人为我我为人人'
         required: true
+        options: [0, 60, 120, 180, 240, 300]
         default: 60
 
       UploadDisk:
