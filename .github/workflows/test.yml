@@ -1,30 +1,21 @@
-name: Resize Filesystem
+name: Resize and Merge Disk
 
 on:
   workflow_dispatch:
-
 jobs:
-  resize:
-    runs-on: ubuntu-latest    
+  resize-and-merge-disk:
+    runs-on: ubuntu-latest
+
     steps:
-      - name: umount /tmp
-        run: |
-          sudo umount /tmp
-        continue-on-error: true
-      - name: Resize /dev/sdb1
-        run: |
-          sudo parted /dev/sdb resizepart 1 5G
-          sudo resize2fs /dev/sdb1 5G
-        continue-on-error: true
-      - name: Extend root logical volume
-        run: |
-          sudo lvextend -l +100%FREE /dev/ubuntu-vg/root
-        continue-on-error: true
-      - name: Resize root filesystem
-        run: |
-          sudo resize2fs /dev/ubuntu-vg/root
-        continue-on-error: true
-      - name: Mount /tmp
-        run: |
-          sudo mount /dev/sdb1 /tmp
-        continue-on-error: true
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Resize Disk
+      run: |
+        sudo umount /dev/sdb1
+        sudo resize2fs /dev/sdb1 5G
+        sudo parted /dev/sdb resizepart 1 5GB
+        sudo pvcreate /dev/sdb1
+        sudo vgextend /dev/sdb1
+        sudo lvextend -l +100%FREE /
+        sudo resize2fs /
