@@ -1,0 +1,29 @@
+name: Resize Filesystem
+
+on:
+  workflow_dispatch:
+
+jobs:
+  resize:
+    runs-on: ubuntu-latest
+      - name: jhklj
+        run: |
+          sudo umount /tmp
+        continue-on-error: true
+      - name: Resize /dev/sdb1
+        run: |
+          sudo parted /dev/sdb resizepart 1 5G
+          sudo resize2fs /dev/sdb1 5G
+        continue-on-error: true
+      - name: Extend root logical volume
+        run: |
+          sudo lvextend -l +100%FREE /dev/ubuntu-vg/root
+        continue-on-error: true
+      - name: Resize root filesystem
+        run: |
+          sudo resize2fs /dev/ubuntu-vg/root
+        continue-on-error: true
+      - name: Mount /tmp
+        run: |
+          sudo mount /dev/sdb1 /tmp
+        continue-on-error: true
