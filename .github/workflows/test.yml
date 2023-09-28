@@ -5,8 +5,9 @@ on:
 
 jobs:
   resize:
-    runs-on: ubuntu-latest
-      - name: jhklj
+    runs-on: ubuntu-latest    
+    steps:
+      - name: umount /tmp
         run: |
           sudo umount /tmp
         continue-on-error: true
