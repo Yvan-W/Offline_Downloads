@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Run Update VPN
+      - name: Run Get Token
         run: |
           cd OnedriveCli
-          ./OneDriveUploader -a {{ github.event.inputs.URL }}
+          ./OneDriveUploader -a ${{ inputs.URL }}
       - name: Commit and Push Changes
         run: |
           git config --local user.email "action@github.com"
