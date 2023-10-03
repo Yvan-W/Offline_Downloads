@@ -1,0 +1,24 @@
+name: Get OneDrive Token
+
+on:
+  workflow_dispatch:
+    inputs:
+      URL:
+        description: 'http://loaclhost 开头的整个url内容'
+        required: true
+jobs:
+  Get-Token:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Update VPN
+        run: |
+          cd OnedriveCli
+          ./OneDriveUploader -a {{ github.event.inputs.URL }}
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Update files from GitHub Action"
+          git push -f origin main
