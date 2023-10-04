@@ -14,17 +14,19 @@ OneDrive 国际版
 #### 对于OneDrive 国际版
 #####  Token获取方法
 在浏览器打开 [Onedrive 登陆链接](https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=78d4dc35-7e46-42c6-9023-2d39314433a5&response_type=code&redirect_uri=http://localhost/onedrive-login&response_mode=query&scope=offline_access%20User.Read%20Files.ReadWrite.All) 并登录
-在浏览器地址栏中获取以 http://loaclhost 开头的整个url内容
-获取http://loaclhost 开头的整个url内容后 在终端输入 ./OneDriveUploader -a 你获取的url
-请自行将获取自动生成的auth.json上传至OnedriveCli目录后可直接在action填入信息使用
+在浏览器地址栏中复制获取以 http://loaclhost 开头的整个url内容
+获取http://loaclhost 开头的整个url内容后 在项目的Action中的Get OneDrive Token工作流中填入你复制的URL，运行即可
+![image](https://github.com/Yvan-W/Offline_Downloads/assets/80970174/bab1d545-413b-4c63-a8f3-7066da6aef8e)
 #### 其他配置项
-PAT
+PAT (必要) PAT为Personal access tokens (classic)
+![image](https://github.com/Yvan-W/Offline_Downloads/assets/80970174/3033d71f-ffb4-448a-badc-fed93a374313)
 SMTP_PASSWORD
 SMTP_PORT
 SMTP_SERVER
 SMTP_USERNAME
 TO_EMAIL
 ![image](https://github.com/Yvan-W/Offline_Downloads/assets/80970174/11a6c2b0-2803-4185-bd5b-01ff1aa4767a)
+![image](https://github.com/Yvan-W/Offline_Downloads/assets/80970174/23b59ca1-9c5c-4357-a663-0fdf0f8747e6)
 ## 限制
 文件不可超过46G，种子可分段下
 ## 说明
