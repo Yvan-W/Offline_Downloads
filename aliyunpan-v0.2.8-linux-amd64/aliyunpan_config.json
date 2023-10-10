@@ -1,0 +1,23 @@
+{
+ "configVer": "1.0",
+ "activeUID": "",
+ "userList": null,
+ "cacheSize": 0,
+ "maxDownloadParallel": 0,
+ "maxUploadParallel": 0,
+ "maxDownloadRate": 0,
+ "maxUploadRate": 0,
+ "transferUrlType": 0,
+ "saveDir": "/home/codespace/Downloads",
+ "proxy": "",
+ "localAddrs": "",
+ "updateCheckInfo": {
+  "preferUpdateSrv": "",
+  "latestVer": "v0.2.8",
+  "checkTime": 1696906451
+ },
+ "videoFileExtensions": "mp4,flv,mkv,mov,rm,rmvb,wmv,wma,mv,asf,asx,mpg,mpeg,mpe,3gp,m4v,avi,vob",
+ "fileRecordConfig": "1",
+ "deviceId": "QO4tSC6ODMhmDUBqncKC8CRJ",
+ "deviceName": "Chrome浏览器"
+}
