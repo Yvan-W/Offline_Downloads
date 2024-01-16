@@ -83,9 +83,9 @@ jobs:
               if [[ "${{ inputs.tracker }}" == *true* ]]; then
                 echo -e "${INFO} Update BT trackers for Aria2" && echo
                 bash ${{ github.workspace }}/aria/tracker.sh ${{ github.workspace }}/aria/tracker_list.txt
-                aria2c '${{ github.event.inputs.BT }}' --bt-tracker="$(cat "${{ github.workspace }}/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=${{ github.event.inputs.Seed }} --max-connection-per-server=16
+                aria2c '${{ github.event.inputs.BT }}' --bt-tracker="$(cat "${{ github.workspace }}/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16
               else
-                aria2c '${{ github.event.inputs.BT }}' --seed-time=${{ github.event.inputs.Seed }} --max-connection-per-server=16
+                aria2c '${{ github.event.inputs.BT }}' --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16
               fi
             else
               sudo apt install -y transmission-cli
@@ -99,15 +99,15 @@ jobs:
                 echo -e "${INFO} Update BT trackers for Aria2" && echo
                 bash ${{ github.workspace }}/aria/tracker.sh ${{ github.workspace }}/aria/tracker_list.txt
                 if [ -n "${{ github.event.inputs.choice }}" ]; then
-                  aria2c 1.torrent --bt-tracker="$(cat "${{ github.workspace }}/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=${{ github.event.inputs.Seed }} --max-connection-per-server=16 --select-file=${{ github.event.inputs.choice }}
+                  aria2c 1.torrent --bt-tracker="$(cat "${{ github.workspace }}/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16 --select-file=${{ github.event.inputs.choice }}
                 else
-                  aria2c 1.torrent --bt-tracker="$(cat "${{ github.workspace }}/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=${{ github.event.inputs.Seed }} --max-connection-per-server=16
+                  aria2c 1.torrent --bt-tracker="$(cat "${{ github.workspace }}/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16
                 fi 
               else
                 if [ -n "${{ github.event.inputs.choice }}" ]; then
-                  aria2c 1.torrent --seed-time=${{ github.event.inputs.Seed }} --max-connection-per-server=16 --select-file=${{ github.event.inputs.choice }}
+                  aria2c 1.torrent --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16 --select-file=${{ github.event.inputs.choice }}
                 else
-                  aria2c 1.torrent --seed-time=${{ github.event.inputs.Seed }} --max-connection-per-server=16
+                  aria2c 1.torrent --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16
                 fi
               fi
             else
