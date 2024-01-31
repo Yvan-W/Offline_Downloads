@@ -124,7 +124,7 @@ jobs:
         run: |
           ls
           if [[ "${{ inputs.UploadDisk }}" == *Aliyun* ]]; then
-            cd ${{ github.workspace }}/aliyunpan-v0.2.8-linux-amd64
+            cd ${{ github.workspace }}/aliyunpan
             ./aliyunpan login -RefreshToken=${{ secrets.ALIYUNTOKEN }}
             ./aliyunpan upload ${{ github.workspace }}/Server_Upload /影视
             ./aliyunpan logout -y

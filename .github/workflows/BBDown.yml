@@ -31,7 +31,7 @@ jobs:
         run: |
           ls
           if [ -n "${{ github.event.inputs.Token-Aliyun }}" ]; then
-            cd /home/runner/work/Offline_Downloads/Offline_Downloads/aliyunpan-v0.2.7-linux-amd64
+            cd /home/runner/work/Offline_Downloads/Offline_Downloads/aliyunpan
             ./aliyunpan login -RefreshToken=${{ github.event.inputs.Token-Aliyun }}
             ./aliyunpan upload /home/runner/work/Offline_Downloads/Offline_Downloads/Server_Upload /影视
             ./aliyunpan logout -y
