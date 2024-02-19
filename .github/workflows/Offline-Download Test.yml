@@ -1,6 +1,5 @@
 name: Offline Download With Rename
-run-name: ${{ download_folder }}
-# run-name: ${{ inputs.RenameFolder }}
+run-name: ${{ inputs.RenameFolder }}
 on:
   workflow_dispatch:
     inputs:
