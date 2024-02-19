@@ -124,9 +124,9 @@ jobs:
           download_folder="${{ steps.get_folder_name.outputs.folder_name }}"
           mv "$download_folder" "${{ github.event.inputs.RenameFolder }}"
       - name: RenameFile
+        working-directory: ${{ github.workspace }}/Server_Upload/${{ github.event.inputs.RenameFolder }}
         if: ${{ github.event.inputs.RenameFile != '' }}
         run: |
-          cd ${{ github.workspace }}/Server_Upload/${{ github.event.inputs.RenameFolder }}
           # 将重命名命令按行分割并逐行执行
           IFS=$'\n'
           for cmd in "${{ github.event.inputs.RenameFile }}"; do
