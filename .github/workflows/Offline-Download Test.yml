@@ -126,12 +126,7 @@ jobs:
         working-directory: ${{ github.workspace }}/Server_Upload/${{ github.event.inputs.RenameFolder }}
         if: ${{ github.event.inputs.RenameFile != '' }}
         run: |
-          IFS=$'\n'
-          commands=(${{ github.event.inputs.RenameFile }})
-          for cmd in "${commands[@]}"; do
-            echo "Running command: $cmd"
-            pwsh -Command "$cmd"
-          done
+          {{ github.event.inputs.RenameFile }}
       - name: Upload
         run: |
           ls
