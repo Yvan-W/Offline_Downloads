@@ -72,6 +72,10 @@ jobs:
           else
             df -h
           fi
+          wget -q https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+          dpkg -i packages-microsoft-prod.deb
+          sudo apt-get update -y
+          sudo apt-get install powershell -y
       - uses: actions/checkout@v3
       - name: Download
         run: |
@@ -126,7 +130,10 @@ jobs:
         working-directory: ${{ github.workspace }}/Server_Upload/${{ github.event.inputs.RenameFolder }}
         if: ${{ github.event.inputs.RenameFile != '' }}
         run: |
-          {{ github.event.inputs.RenameFile }}
+          echo "{{ github.event.inputs.RenameFile }}" > commands.ps1
+          chmod +x commands.ps1
+          pwsh -File commands.ps1
+          rm -rf commands.ps1
       - name: Upload
         run: |
           ls
