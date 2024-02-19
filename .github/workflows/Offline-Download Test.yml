@@ -1,5 +1,5 @@
 name: Offline Download With Rename
-run-name: ${{ download_folder }}
+run-name: ${{ inputs.RenameFolder }}
 on:
   workflow_dispatch:
     inputs:
@@ -37,8 +37,8 @@ on:
         options: [0, 60, 120, 180, 240, 300]
         default: 60
       RenameFolder:
-        description: 是否重命名下载文件夹名称
-        required: false
+        description: 重命名下载文件夹名称
+        required: true
       RenameFile:
         description: 是否针对番剧等进行规则化重命名，是则直接填命令（多条以换行符分割），否则不填 命令示例：Get-ChildItem -Filter "*[01]*.ass" | Rename-Item -NewName {'.ass'}
         required: false
@@ -136,28 +136,17 @@ jobs:
           echo "::set-output name=folder_name::$download_folder"
       - name: Rename download folder
         working-directory: ${{ github.workspace }}/Server_Upload
-        if: ${{ github.event.inputs.RenameFolder != '' }}
         run: mv "$download_folder" "${{ github.event.inputs.RenameFolder }}"
       - name: RenameFile
         if: ${{ github.event.inputs.RenameFile != '' }}
         run: |
-          if [ -n "${{ github.event.inputs.RenameFolder }}" ]; then
-            cd ${{ github.workspace }}/Server_Upload/${{ github.event.inputs.RenameFolder }}
-            # 将重命名命令按行分割并逐行执行
-            IFS=$'\n'
-            for cmd in "${{ github.event.inputs.RenameFile }}"; do
-              echo "Running command: $cmd"
-              eval "$cmd"
-            done
-          else
-            cd ${{ github.workspace }}/Server_Upload/$download_folder
-            # 将重命名命令按行分割并逐行执行
-            IFS=$'\n'
-            for cmd in "${{ github.event.inputs.RenameFile }}"; do
-              echo "Running command: $cmd"
-              eval "$cmd"
-            done
-          fi
+          cd ${{ github.workspace }}/Server_Upload/${{ github.event.inputs.RenameFolder }}
+          # 将重命名命令按行分割并逐行执行
+          IFS=$'\n'
+          for cmd in "${{ github.event.inputs.RenameFile }}"; do
+            echo "Running command: $cmd"
+            eval "$cmd"
+          done
       - name: Upload
         run: |
           ls
