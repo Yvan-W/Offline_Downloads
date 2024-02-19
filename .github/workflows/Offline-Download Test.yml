@@ -72,8 +72,6 @@ jobs:
           else
             df -h
           fi
-          wget -q https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-          dpkg -i packages-microsoft-prod.deb
           sudo apt-get update -y
           sudo apt-get install powershell -y
       - uses: actions/checkout@v3
