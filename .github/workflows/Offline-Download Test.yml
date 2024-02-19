@@ -130,7 +130,7 @@ jobs:
           commands=(${{ github.event.inputs.RenameFile }})
           for cmd in "${commands[@]}"; do
             echo "Running command: $cmd"
-            eval "$cmd"
+            pwsh -Command "$cmd"
           done
       - name: Upload
         run: |
