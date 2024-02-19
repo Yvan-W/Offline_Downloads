@@ -36,6 +36,25 @@ on:
       RenameFile:
         description: 是否针对番剧等进行规则化重命名，是则直接填命令（多条以换行符分割），否则不填 命令示例：Get-ChildItem -Filter "*[01]*.ass" | Rename-Item -NewName {'.ass'}
         required: false
+        default: |
+          这是第一行。
+          这是第二行。
+          这是第三行。
+          4
+          5
+          6
+          7
+          8
+          9
+          10
+          11
+          12
+          13
+          14
+          15
+          16
+          17
+          18
       UploadDisk:
         type: choice
         description: '阿里云盘或Onedrive'
