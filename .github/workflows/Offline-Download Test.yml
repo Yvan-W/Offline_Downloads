@@ -120,7 +120,9 @@ jobs:
           echo "::set-output name=folder_name::$download_folder"
       - name: Rename download folder
         working-directory: ${{ github.workspace }}/Server_Upload
-        run: mv "$download_folder" "${{ github.event.inputs.RenameFolder }}"
+        run: |
+          download_folder=${{ steps.get_folder_name.outputs.folder_name }}
+          mv "$download_folder" "${{ github.event.inputs.RenameFolder }}"
       - name: RenameFile
         if: ${{ github.event.inputs.RenameFile != '' }}
         run: |
