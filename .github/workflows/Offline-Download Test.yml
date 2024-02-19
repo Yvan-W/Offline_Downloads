@@ -128,7 +128,7 @@ jobs:
         working-directory: ${{ github.workspace }}/Server_Upload/${{ github.event.inputs.RenameFolder }}
         if: ${{ github.event.inputs.RenameFile != '' }}
         run: |
-          echo "{{ github.event.inputs.RenameFile }}" > commands.ps1
+          echo "${{ github.event.inputs.RenameFile }}" > commands.ps1
           chmod +x commands.ps1
           pwsh -File commands.ps1
           rm -rf commands.ps1
