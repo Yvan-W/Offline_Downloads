@@ -114,7 +114,6 @@ jobs:
         id: get_folder_name
         working-directory: ${{ github.workspace }}/Server_Upload
         run: |
-          # 获取当前目录下的第一个文件夹的名称
           download_folder=$(ls -d */ | head -n 1 | cut -f1 -d'/')
           echo "Download folder name: $download_folder"
           echo "::set-output name=folder_name::$download_folder"
@@ -127,9 +126,9 @@ jobs:
         working-directory: ${{ github.workspace }}/Server_Upload/${{ github.event.inputs.RenameFolder }}
         if: ${{ github.event.inputs.RenameFile != '' }}
         run: |
-          # 将重命名命令按行分割并逐行执行
           IFS=$'\n'
-          for cmd in "${{ github.event.inputs.RenameFile }}"; do
+          commands=(${{ github.event.inputs.RenameFile }})
+          for cmd in "${commands[@]}"; do
             echo "Running command: $cmd"
             eval "$cmd"
           done
