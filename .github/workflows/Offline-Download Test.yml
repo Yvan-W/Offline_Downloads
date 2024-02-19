@@ -1,5 +1,6 @@
 name: Offline Download With Rename
-run-name: ${{ inputs.RenameFolder }}
+run-name: ${{ download_folder }}
+# run-name: ${{ inputs.RenameFolder }}
 on:
   workflow_dispatch:
     inputs:
@@ -15,12 +16,6 @@ on:
       HTTP:
         description: '种子下载直链链接'
         required: false
-      Tool:
-        type: choice
-        description: '下载器'
-        required: true
-        options: [aria, transmission]
-        default: aria
       tracker:
         type: choice
         description: 'aria是否自定义tracker'
@@ -84,41 +79,31 @@ jobs:
           mkdir Server_Upload
           cd Server_Upload
           if [ -n "${{ github.event.inputs.BT }}" ]; then
-            if [[ "${{ inputs.Tool }}" == *aria* ]]; then
-              sudo apt install -y aria2
-              if [[ "${{ inputs.tracker }}" == *true* ]]; then
-                echo -e "${INFO} Update BT trackers for Aria2" && echo
-                bash ${{ github.workspace }}/aria/tracker.sh ${{ github.workspace }}/aria/tracker_list.txt
-                aria2c '${{ github.event.inputs.BT }}' --bt-tracker="$(cat "${{ github.workspace }}/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16
-              else
-                aria2c '${{ github.event.inputs.BT }}' --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16
-              fi
+            sudo apt install -y aria2
+            if [[ "${{ inputs.tracker }}" == *true* ]]; then
+              echo -e "${INFO} Update BT trackers for Aria2" && echo
+              bash ${{ github.workspace }}/aria/tracker.sh ${{ github.workspace }}/aria/tracker_list.txt
+              aria2c '${{ github.event.inputs.BT }}' --bt-tracker="$(cat "${{ github.workspace }}/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16
             else
-              sudo apt install -y transmission-cli
-              transmission-cli "${{ github.event.inputs.BT }}"
+              aria2c '${{ github.event.inputs.BT }}' --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16
             fi
           else
-            if [[ "${{ inputs.Tool }}" == *aria* ]]; then
-              sudo apt install -y aria2
-              wget "${{ github.event.inputs.HTTP }}" -O 1.torrent
-              if [[ "${{ inputs.tracker }}" == *true* ]]; then
-                echo -e "${INFO} Update BT trackers for Aria2" && echo
-                bash ${{ github.workspace }}/aria/tracker.sh ${{ github.workspace }}/aria/tracker_list.txt
-                if [ -n "${{ github.event.inputs.choice }}" ]; then
-                  aria2c 1.torrent --bt-tracker="$(cat "${{ github.workspace }}/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16 --select-file=${{ github.event.inputs.choice }}
-                else
-                  aria2c 1.torrent --bt-tracker="$(cat "${{ github.workspace }}/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16
-                fi 
+            sudo apt install -y aria2
+            wget "${{ github.event.inputs.HTTP }}" -O 1.torrent
+            if [[ "${{ inputs.tracker }}" == *true* ]]; then
+              echo -e "${INFO} Update BT trackers for Aria2" && echo
+              bash ${{ github.workspace }}/aria/tracker.sh ${{ github.workspace }}/aria/tracker_list.txt
+              if [ -n "${{ github.event.inputs.choice }}" ]; then
+                aria2c 1.torrent --bt-tracker="$(cat "${{ github.workspace }}/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16 --select-file=${{ github.event.inputs.choice }}
               else
-                if [ -n "${{ github.event.inputs.choice }}" ]; then
-                  aria2c 1.torrent --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16 --select-file=${{ github.event.inputs.choice }}
-                else
-                  aria2c 1.torrent --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16
-                fi
-              fi
+                aria2c 1.torrent --bt-tracker="$(cat "${{ github.workspace }}/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16
+              fi 
             else
-              sudo apt install -y transmission-cli
-              transmission-cli "${{ github.event.inputs.HTTP }}"
+              if [ -n "${{ github.event.inputs.choice }}" ]; then
+                aria2c 1.torrent --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16 --select-file=${{ github.event.inputs.choice }}
+              else
+                aria2c 1.torrent --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16
+              fi
             fi
           fi
           ls
