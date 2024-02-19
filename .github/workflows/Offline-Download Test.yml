@@ -5,7 +5,7 @@ on:
     inputs:
       clear:
         type: choice
-        description: '是否清理 清理最大支持46G，不清理仅有22G'
+        description: '是否清理 清理最大支持46G，不清理仅有20G'
         required: false
         options: [true, false]
         default: true
