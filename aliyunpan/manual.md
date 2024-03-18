@@ -9,8 +9,7 @@
     * [获取当前帐号](#获取当前帐号)
     * [切换阿里云盘帐号](#切换阿里云盘帐号)
     * [退出阿里云盘帐号](#退出阿里云盘帐号)
-    * [刷新Token](#刷新Token)
-    * [切换网盘(备份盘/资源库/相册)](#切换网盘)
+    * [切换网盘(备份盘/资源库)](#切换网盘)
     * [获取网盘配额](#获取网盘配额)
     * [切换工作目录](#切换工作目录)
     * [输出工作目录](#输出工作目录)
@@ -24,9 +23,9 @@
     * [重命名文件/目录](#重命名文件目录)
     * [分享文件/目录](#分享文件目录)
         + [设置分享文件/目录](#设置分享文件目录)
+        + [创建快传链接](#创建快传链接)
         + [列出已分享文件/目录](#列出已分享文件目录)
         + [取消分享文件/目录](#取消分享文件目录)
-        + [分享秒传链接](#分享秒传链接)
     * [同步备份功能](#同步备份功能)
         + [常用命令说明](#常用命令说明)
         + [备份配置文件说明](#备份配置文件说明)
@@ -45,8 +44,7 @@
             + [5.Token刷新失败发送外部通知](#5.Token刷新失败发送外部通知)
     * [显示和修改程序配置项](#显示和修改程序配置项)
 - [常见问题Q&A](#常见问题Q&A)
-    * [1. 如何获取RefreshToken](#1-如何获取RefreshToken)
-    * [2. 如何开启Debug调试日志](#2-如何开启Debug调试日志)
+    * [1. 如何开启Debug调试日志](#1-如何开启Debug调试日志)
 
 # 命令列表及说明
 ## 注意
@@ -86,25 +84,32 @@ aliyunpan help login
 ## 登录阿里云盘帐号
 
 ### 登录
-当前支持使用RefreshToken进行登录。RefreshToken请参考 [1. 如何获取RefreshToken](#1-如何获取RefreshToken) 获取
+当前支持在浏览器进行登录，请输入以下命令按照步骤进行即可。
 ```
 aliyunpan login
 ```
 
 ### 例子
 ```
-按照引导步骤登录
-aliyunpan login
-请输入RefreshToken, 回车键提交 > 626a27b6193f4c5ca6ef0.......
-
-命令行指定RefreshToken登录
-aliyunpan login -RefreshToken=626a27b6193f4c5ca6ef0.......
-
-使用二维码方式进行登录，按照引导步骤进行
-aliyunpan login -QrCode
+aliyunpan > login
+请在浏览器打开以下链接进行登录，链接有效时间为5分钟。
+注意：你需要进行一次授权一次扫码的两次登录。
+https://openapi.alipan.com/oauth/authorize?client_id=cf9f70e8fc61430f8ec5ab5cadf31375&redirect_uri=https%3A%2F%2Fapi.tickstep.com%2Fauth%2Ftickstep%2Faliyunpan%2Ftoken%2Fopenapi%2F8206f0.....fb5db6b40336%2Fauth&scope=user:base,file:all:read,file:all:write
+阿里云盘登录成功:  tickstep
+aliyunpan:/ tickstep$ 
 ```
+目前登录全部采用网页登录，由于 aliyunpan 融合了阿里官方Open接口+网页Web端接口，所以你需要进行两次登录。输入 login 命令   
+![](../assets/images/login-screenshot-1.png)
 
+复制该链接到浏览器打开，会自动跳转到阿里官方授权登录页面，点击允许完成第一次登录   
+![](../assets/images/login-screenshot-2.png)
 
+接着页面会自动跳转到网页接口登录页面，使用阿里APP扫码完成第二次登录   
+![](../assets/images/login-screenshot-3.png)
+
+然后切换回 aliyunpan 程序，按下 Enter 按键完成登录即可   
+![](../assets/images/login-screenshot-4.png)
+   
 ## 列出帐号列表
 
 ```
@@ -140,25 +145,8 @@ aliyunpan logout
 
 程序会进一步确认退出帐号, 防止误操作.
 
-## 刷新Token
-由于阿里云盘的RefreshToken是会过期的，为了延长最大过期时间，需要定期刷新Token，建议每小时刷新一次。
-调用该命令可以自动刷新RefreshToken并保存到配置文件中，但是有一个前提，即Token必须还没有过期，如果Token已经过期是无法刷新的则只能重新登录。
-```
-刷新当前登录用户
-aliyunpan token update
-
-刷新所有登录的用户
-aliyunpan token update -mode 2
-```
-
-如果你的aliyunpan工具是在Linux中运行，则建议你使用crontab定时任务进行Token自动刷新，例如
-```
-每小时执行一次Token刷新任务
-*/60  * * * * /<your path>/aliyunpan token update -mode 2
-```
-
 ## 切换网盘
-程序默认工作在文件网盘下，如需切换到相册网盘，可以使用本命令进行切换。
+程序默认工作在文件网盘下，如需切换到资源库网盘，可以使用本命令进行切换。
 ```
 aliyunpan drive <driveId>
 ```
@@ -226,11 +214,6 @@ aliyunpan ll /我的文档
 ```
 
 ## 下载文件/目录
-下载支持两种链接类型：1-默认类型 2-阿里ECS环境类型   
-在普通网络下，下载速度可以达到10MB/s，在阿里ECS（必须是"经典网络"类型的机器）环境下，下载速度单文件可以轻松达到20MB/s，多文件可以达到100MB/s   
-![](../assets/images/download_file_ecs_speed_screenshot.gif)
-![](../assets/images/download_file_speed_screenshot.gif)
-
 ```
 aliyunpan download <网盘文件或目录的路径1> <文件或目录2> <文件或目录3> ...
 aliyunpan d <网盘文件或目录的路径1> <文件或目录2> <文件或目录3> ...
@@ -274,10 +257,6 @@ aliyunpan d /我的文档
 自动跳过下载重名的文件!
 
 ## 上传文件/目录
-上传支持两种链接类型：1-默认类型 2-阿里ECS环境类型   
-在阿里ECS（必须是"经典网络"类型的机器）环境下，上传速度单文件可以轻松达到30MB/s，多文件可以达到100MB/s   
-![](../assets/images/upload_file_speed_screenshot.gif)
-
 ```
 aliyunpan upload <本地文件/目录的路径1> <文件/目录2> <文件/目录3> ... <目标目录>
 aliyunpan u <本地文件/目录的路径1> <文件/目录2> <文件/目录3> ... <目标目录>
@@ -309,22 +288,6 @@ aliyunpan upload -exn "\.jpg$" -exn "\.mp3$" C:/Users/Administrator/Video /视�
 3)排除.号开头的文件：-exn "^\."
 4)排除~号开头的文件：-exn "^~"
 5)排除 myfile.txt 文件：-exn "^myfile.txt$"
-```
-
-## 手动秒传上传文件
-通过秒传链接上传文件到网盘，秒传链接可以通过share命令获取
-```
-aliyunpan rapidupload <秒传链接1> <秒传链接2> <秒传链接3> ...
-```
-
-### 例子:
-```
-# 如果秒传成功, 则保存到网盘路径 /file.dmg
-aliyunpan rapidupload "aliyunpan://file.dmg|752FCCBFB2436A6FFCA3B287831D4FAA5654B07E|7005440|"
-
-# 如果秒传成功, 则保存到网盘路径 /pan_folder/file.dmg
-aliyunpan rapidupload "aliyunpan://file.dmg|752FCCBFB2436A6FFCA3B287831D4FAA5654B07E|7005440|pan_folder"
-
 ```
 
 ## 创建目录
@@ -410,55 +373,37 @@ aliyunpan share
 ```
 
 ### 设置分享文件/目录
-阿里目前之支持少数文件类型的分享，不支持的文件分享会提示分享失败
+阿里目前只支持少数文件类型的分享，不支持的文件分享会提示分享失败
 ```
-aliyunpan share set <文件/目录1> <文件/目录2> ...
-aliyunpan share s <文件/目录1> <文件/目录2> ...
+aliyunpan share set -mode 1 <文件/目录1> <文件/目录2> ...
+```
+
+### 创建快传链接
+阿里的快传支持大部分文件的共享，例如zip压缩包，按照如下方式可以创建快传链接
+```
+aliyunpan share set -mode 3 <文件/目录1> <文件/目录2> ...
 ```
 
 ### 列出已分享文件/目录
 ```
 aliyunpan share list
-aliyunpan share l
 ```
 
 ### 取消分享文件/目录
 ```
 aliyunpan share cancel <shareid_1> <shareid_2> ...
-aliyunpan share c <shareid_1> <shareid_2> ...
 ```
 目前只支持通过分享id (shareid) 来取消分享.
-
-
-### 分享秒传链接
-秒传链接支持所有类型的文件分享，可以突破阿里的分享限制。得到的链接可以使用import或者rapidupload命令保存到自己网盘中。
-秒传链接只支持文件分享，不支持文件夹。如果指定文件夹会创建文件夹下所有文件的秒传链接。
-```
-aliyunpan share mc <文件/目录1> <文件/目录2> ...
-
-例子
-# 创建文件 1.mp4 的秒传链接 
-aliyunpan share mc 1.mp4
-
-# 创建文件 1.mp4 的秒传链接，但链接隐藏相对路径
-aliyunpan share mc -hp 1.mp4
-
-# 创建文件夹 share_folder 下面所有文件的秒传链接
-aliyunpan share mc share_folder/
-```
 
 ## 同步备份功能
 同步备份功能，支持备份本地文件到云盘，备份云盘文件到本地，双向同步备份三种模式。支持JavaScript插件对备份文件进行过滤。
 指定本地目录和对应的一个网盘目录，以备份文件。网盘目录必须和本地目录独占使用，不要用作其他用途，不然备份可能会有问题。
-
-备份功能支持以下三种模式：
+   
+备份功能支持以下模式：   
 1. 备份本地文件，即上传本地文件到网盘，始终保持本地文件有一个完整的备份在网盘
 2. 备份云盘文件，即下载网盘文件到本地，始终保持网盘的文件有一个完整的备份在本地
-3. 双向备份，保持网盘文件和本地文件严格一致
-
+   
 备份功能一般用于NAS等系统，进行文件备份。比如备份照片，就可以使用这个功能定期备份照片到云盘，十分好用。
-
-***如果你同步目录下有非常多的文件，最好在首次备份前先运行一次scan任务，等scan任务完成并建立起同步数据库后，再正常启动同步任务。这样同步任务可以更加快速并且能有效避免同步重复文件。***
 
 ### 常用命令说明
 ```
@@ -483,10 +428,6 @@ aliyunpan sync start
 
 使用配置文件启动同步备份服务，并配置下载并发为2，上传并发为1，下载分片大小为256KB，上传分片大小为1MB
 aliyunpan sync start -dp 2 -up 1 -dbs 256 -ubs 1024
-
-当你本地同步目录文件非常多，或者云盘同步目录文件非常多，为了后期更快更精准同步文件，可以先进行文件扫描并构建同步数据库，然后再正常启动同步任务。如下所示：
-aliyunpan sync start -step scan
-aliyunpan sync start
 ```
 
 ### 备份配置文件说明
@@ -502,13 +443,15 @@ aliyunpan sync start
    "name": "设计文档备份",
    "localFolderPath": "D:/tickstep/Documents/设计文档",
    "panFolderPath": "/备份盘/我的文档",
-   "mode": "upload"
+   "mode": "upload",
+   "driveName": "backup"
   },
   {
    "name": "手机图片备份",
    "localFolderPath": "D:/tickstep/Photos/手机图片",
    "panFolderPath": "/备份盘/手机图片",
-   "mode": "upload"
+   "mode": "upload",
+   "driveName": "resource"
   }
  ]
 }
@@ -517,7 +460,8 @@ aliyunpan sync start
 name - 任务名称
 localFolderPath - 本地目录
 panFolderPath - 网盘目录
-mode - 模式，支持三种: upload(备份本地文件到云盘),download(备份云盘文件到本地),sync(双向同步备份)
+mode - 模式，支持: upload(备份本地文件到云盘),download(备份云盘文件到本地)
+driveName - 网盘，支持：backup(备份盘), resource(资源盘)
 ```
 
 ### 命令行启动
@@ -525,12 +469,13 @@ mode - 模式，支持三种: upload(备份本地文件到云盘),download(备�
 
 ```
 使用命令行配置启动同步备份服务，将本地目录 /tickstep/Documents/设计文档 中的文件备份上传到云盘目录 /备份盘/我的文档
-./aliyunpan sync start -ldir "/tickstep/Documents/设计文档" -pdir "/备份盘/我的文档" -mode "upload"
+./aliyunpan sync start -ldir "/tickstep/Documents/设计文档" -pdir "/备份盘/我的文档" -mode "upload" -drive "backup"
 
 参数说明
 ldir：本地目录
 pdir：云盘目录
-mode：备份模式，支持：upload(备份本地文件到云盘),download(备份云盘文件到本地),sync(双向同步备份)
+mode：备份模式，支持：upload(备份本地文件到云盘),download(备份云盘文件到本地)
+drive - 网盘，支持：backup(备份盘), resource(资源盘)
 
 --------------------------------------------------------------
 正常会有以下的输出：
@@ -560,15 +505,9 @@ cd /path/to/aliyunpan/folder
 
 chmod +x ./aliyunpan
 
-# 指定refresh token用于登录
-./aliyunpan login -RefreshToken=9078907....adg9087
-
-# 上传下载链接类型：1-默认 2-阿里ECS环境
-./aliyunpan config set -transfer_url_type 1
-
 # 指定配置参数并进行启动
 # 支持的模式：upload(备份本地文件到云盘),download(备份云盘文件到本地),sync(双向同步备份)
-./aliyunpan sync start -ldir "/tickstep/Documents/设计文档" -pdir "/备份盘/我的文档" -mode "upload"
+./aliyunpan sync start -ldir "/tickstep/Documents/设计文档" -pdir "/备份盘/我的文档" -mode "upload" -drive "backup"
 ```
 
 增加脚本执行权限
@@ -628,14 +567,13 @@ D:\Program Files\aliyunpan>alisync stop
 
 1. 直接运行
 ```
-docker run -d --name=aliyunpan-sync --restart=always -v "<your local dir>:/home/app/data" -e TZ="Asia/Shanghai" -e ALIYUNPAN_REFRESH_TOKEN="<your refreshToken>" -e ALIYUNPAN_PAN_DIR="<your drive pan dir>" -e ALIYUNPAN_SYNC_MODE="upload" -e ALIYUNPAN_TASK_STEP="sync" tickstep/aliyunpan-sync:<tag>
- 
+docker run -d --name=aliyunpan-sync --restart=always -v "<your aliyunpan_config.json>:/home/app/config/aliyunpan_config.json" -v "<your local dir>:/home/app/data" -e ALIYUNPAN_PAN_DIR="<your drive pan dir>" -e ALIYUNPAN_SYNC_MODE="upload" -e ALIYUNPAN_SYNC_DRIVE="backup" tickstep/aliyunpan-sync:<tag> 
   
-<your local dir>：本地目录绝对路径，例如：/tickstep/Documents/设计文档
-ALIYUNPAN_PAN_DIR：云盘目录
-ALIYUNPAN_REFRESH_TOKEN：RefreshToken
-ALIYUNPAN_SYNC_MODE：备份模式，支持三种: upload(备份本地文件到云盘),download(备份云盘文件到本地),sync(双向同步备份)
-ALIYUNPAN_TASK_STEP：任务步骤, 支持两种: scan(只扫描并建立同步数据库),sync(正常启动同步任务)。如果你同步目录文件非常多，首次运行最好先跑一次scan步骤，然后再正常启动文件同步任务
+<your aliyunpan_config.json>: 用户已经登录成功并保存好的aliyunpan_config.json凭据文件
+<your local dir>：本地目标目录，绝对路径，例如：/tickstep/Documents/设计文档
+ALIYUNPAN_PAN_DIR：云盘目标目录，绝对路径
+ALIYUNPAN_SYNC_MODE：备份模式，支持两种: upload(备份本地文件到云盘),download(备份云盘文件到本地)
+ALIYUNPAN_SYNC_DRIVE: 网盘，支持两种：backup(备份盘), resource(资源盘)
 ```
 
 2. docker-compose运行   
@@ -649,18 +587,17 @@ services:
     container_name: aliyunpan-sync
     restart: always
     volumes:
-      # 指定本地备份目录绝对路径：/tickstep/Documents/设计文档
-      - /tickstep/Documents/设计文档:/home/app/data:rw
-      # （可选）可以指定JS插件sync_handler.js用于过滤文件，详见下面的插件说明
+      # （必须）映射的本地目录
+      - ./data:/home/app/data:rw
+      # （可选）可以指定JS插件sync_handler.js用于过滤文件，详见插件说明
       #- ./plugin/js/sync_handler.js:/home/app/config/plugin/js/sync_handler.js
-      # （推荐）挂载sync_drive同步数据库到本地
+      # （推荐）挂载sync_drive同步数据库到本地，这样即使容器销毁，同步数据库还可以用于以后使用
       #- ./sync_drive:/home/app/config/sync_drive
+      # （必须）映射token凭据文件
+      - /your/file/path/for/aliyunpan_config.json:/home/app/config/aliyunpan_config.json
     environment:
+      # 时区，东8区
       - TZ=Asia/Shanghai
-      # refresh token
-      - ALIYUNPAN_REFRESH_TOKEN=41804446a...bf7f069cab2
-      # 上传下载链接类型：1-默认 2-阿里ECS环境
-      - ALIYUNPAN_TRANSFER_URL_TYPE=1
       # 下载文件并发数
       - ALIYUNPAN_DOWNLOAD_PARALLEL=2
       # 上传文件并发数
@@ -669,18 +606,16 @@ services:
       - ALIYUNPAN_DOWNLOAD_BLOCK_SIZE=1024
       # 上传数据块大小，单位为KB，默认为10240KB，建议范围1024KB~10240KB
       - ALIYUNPAN_UPLOAD_BLOCK_SIZE=10240
-      # 指定网盘文件夹作为备份目录，不要指定根目录
-      - ALIYUNPAN_PAN_DIR=/备份盘/我的文档
-      # 备份模式：upload(备份本地文件到云盘), download(备份云盘文件到本地), sync(双向同步备份)
+      # 指定网盘文件夹作为备份目标目录，不要指定根目录
+      - ALIYUNPAN_PAN_DIR=/my_sync_dir
+      # 备份模式：upload(备份本地文件到云盘), download(备份云盘文件到本地)
       - ALIYUNPAN_SYNC_MODE=upload
-      # 优先级，只对双向同步备份模式有效。选项支持三种: time-时间优先，local-本地优先，pan-网盘优先
-      - ALIYUNPAN_SYNC_PRIORITY=time
+      # 网盘：backup(备份盘), resource(资源盘)
+      - ALIYUNPAN_SYNC_DRIVE=backup
       # 是否显示文件备份过程日志，true-显示，false-不显示
       - ALIYUNPAN_SYNC_LOG=true
       # 本地文件修改检测延迟间隔，单位秒。如果本地文件会被频繁修改，例如录制视频文件，配置好该时间可以避免上传未录制好的文件
-      - ALIYUNPAN_LOCAL_DELAY_TIME=3
-      # 任务步骤, 支持两种: scan(只扫描并建立同步数据库),sync(正常启动同步任务)
-      - ALIYUNPAN_TASK_STEP=sync      
+      - ALIYUNPAN_LOCAL_DELAY_TIME=3   
 ```
 
 3. sync_handler.js插件说明   
@@ -853,8 +788,8 @@ function syncScanPanFilePrepareCallback(context, params) {
 7.下载的文件进行改名，但是网盘的文件保持不变   
 8.下载的文件路径进行更改，但是网盘的文件保持不变   
 9.下载文件完成后，通过HTTP通知其他服务   
-10.同步备份功能，支持过滤本地文件，或者过滤云盘文件。定制上传或者下载需要同步的文件
-11.Token刷新失败或者过期，发送外部通知（HTTP&邮件）
+10.同步备份功能，支持过滤本地文件，或者过滤云盘文件。定制上传或者下载需要同步的文件   
+11.Token刷新失败或者过期，发送外部通知（HTTP&邮件）   
 
 ### 如何使用
 JS插件的样本文件默认存放在程序所在的plugin/js文件夹下，分为下载(download_handler.js.sample)、上传(upload_handler.js.sample)、同步备份(sync_handler.js.sample)、用户Token(token_handler.js.sample)插件。
@@ -1215,25 +1150,10 @@ aliyunpan config set -max_download_parallel 15
 
 # 组合设置
 aliyunpan config set -max_download_parallel 15 -savedir D:/Downloads
-
-# 设置使用阿里云内部URL链接，专供阿里云ECS环境使用
-# 开启内部URL链接可以使用阿里云ECS私网带宽流量，而不用使用宝贵的公网带宽流量，如果你在阿里ECS环境中使用本工具，建议开启
-aliyunpan config set -transfer_url_type 2
 ```
 
 # 常见问题Q&A
-## 1 如何获取RefreshToken
-需要通过浏览器获取refresh_token。这里以Chrome浏览器为例，其他浏览器类似。   
-打开 [阿里云盘网页](https://www.aliyundrive.com/drive) 并进行登录，然后F12按键打开浏览器调试菜单，按照下面步骤进行
-![](../assets/images/how-to-get-refresh-token.png)
-
-或者直接在控制台输入以下命令获取
-```
-JSON.parse(localStorage.getItem("token")).refresh_token
-```
-![](../assets/images/how-to-get-refresh-token-cmd.png)
-
-## 2 如何开启Debug调试日志
+## 1 如何开启Debug调试日志
 当需要定位问题，或者提交issue的时候抓取log，则需要开启debug日志。步骤如下：
 
 ### 第一步

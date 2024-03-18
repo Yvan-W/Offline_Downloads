@@ -1,7 +1,7 @@
 name: Email Notification
 on:
   workflow_run:
-    workflows: ["Offline Download"]
+    workflows: ["Offline Download With Rename"]
     types:
       - completed
 jobs:
