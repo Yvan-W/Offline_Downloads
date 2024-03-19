@@ -1,4 +1,5 @@
-name: Offline Download
+name: Offline Download With Rename
+run-name: ${{ inputs.RenameFolder }}
 on:
   workflow_dispatch:
     inputs:
@@ -29,6 +30,12 @@ on:
         required: true
         options: [0, 60, 120, 180, 240, 300]
         default: 60
+      RenameFolder:
+        description: 重命名下载文件夹名称
+        required: true
+      RenameFile:
+        description: 是否针对番剧等进行规则化重命名，是则直接填命令（多条以换行符分割），否则不填 命令示例：Get-ChildItem -Filter "*[01]*.ass" | Rename-Item -NewName {'.ass'}
+        required: false
       UploadDisk:
         type: choice
         description: '阿里云盘或Onedrive'
@@ -105,6 +112,26 @@ jobs:
           rm -rf *.aria2
           ls
           df -h
+      - name: Get download folder name
+        id: get_folder_name
+        working-directory: ${{ github.workspace }}/Server_Upload
+        run: |
+          download_folder=$(ls -d */ | head -n 1 | cut -f1 -d'/')
+          echo "Download folder name: $download_folder"
+          echo "::set-output name=folder_name::$download_folder"
+      - name: Rename download folder
+        working-directory: ${{ github.workspace }}/Server_Upload
+        run: |
+          download_folder="${{ steps.get_folder_name.outputs.folder_name }}"
+          mv "$download_folder" "${{ github.event.inputs.RenameFolder }}"
+      - name: RenameFile
+        working-directory: ${{ github.workspace }}/Server_Upload/${{ github.event.inputs.RenameFolder }}
+        if: ${{ github.event.inputs.RenameFile != '' }}
+        run: |
+          echo "${{ github.event.inputs.RenameFile }}" > commands.ps1
+          chmod +x commands.ps1
+          pwsh -File commands.ps1
+          rm -rf commands.ps1
       - name: Upload
         run: |
           ls
