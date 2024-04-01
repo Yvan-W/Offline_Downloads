@@ -25,7 +25,7 @@ on:
         description: 重命名下载文件夹名称
         required: true
       RenameFile:
-        description: 是否针对番剧等进行规则化重命名，是则直接填命令（多条以换行符分割），否则不填 命令示例：Get-ChildItem -Filter "*[01]*.ass" | Rename-Item -NewName {'.ass'}
+        description: 是否针对番剧等进行规则化重命名，是则直接填命令（多条以 ;分割），否则不填 命令示例：Get-ChildItem -Filter "*[01]*.ass" | Rename-Item -NewName {'.ass'}
         required: false
       UploadDisk:
         type: choice
