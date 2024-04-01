@@ -3,17 +3,8 @@ run-name: ${{ inputs.RenameFolder }}
 on:
   workflow_dispatch:
     inputs:
-      clear:
-        type: choice
-        description: '是否清理 清理最大支持38G，不清理仅有20G'
-        required: false
-        options: [true, false]
-        default: true
-      BT:
-        description: '磁力链接或文件直链'
-        required: false
-      HTTP:
-        description: '种子下载直链链接'
+      Link:
+        description: '磁力、直链、种子'
         required: false
       tracker:
         type: choice
@@ -54,24 +45,20 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          if [[ "${{ inputs.clear }}" == *true* ]]; then
-            df -h
-            docker rmi `docker images -q`
-            sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
-            sudo -E apt update
-            sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* openjdk* mysql* php* mongodb* dotnet* snap*
-            sudo apt autoremove
-            sudo apt autoclean
-            sudo apt clean
-            sudo rm /var/log/*.log
-            sudo rm -rf /tmp/*
-            sudo -E systemctl daemon-reload
-            sudo -E apt -y autoremove --purge
-            sudo -E apt clean
-            df -h
-          else
-            df -h
-          fi
+          df -h
+          docker rmi `docker images -q`
+          sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
+          sudo -E apt update
+          sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* openjdk* mysql* php* mongodb* dotnet* snap*
+          sudo apt autoremove
+          sudo apt autoclean
+          sudo apt clean
+          sudo rm /var/log/*.log
+          sudo rm -rf /tmp/*
+          sudo -E systemctl daemon-reload
+          sudo -E apt -y autoremove --purge
+          sudo -E apt clean
+          df -h
           sudo apt-get update -y
           sudo apt-get install powershell -y
       - uses: actions/checkout@v3
@@ -79,37 +66,28 @@ jobs:
         run: |
           mkdir Server_Upload
           cd Server_Upload
-          if [ -n "${{ github.event.inputs.BT }}" ]; then
-            sudo apt install -y aria2
-            if [[ "${{ inputs.tracker }}" == *true* ]]; then
-              echo -e "${INFO} Update BT trackers for Aria2" && echo
-              bash ${{ github.workspace }}/aria/tracker.sh ${{ github.workspace }}/aria/tracker_list.txt
-              aria2c '${{ github.event.inputs.BT }}' --bt-tracker="$(cat "${{ github.workspace }}/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16
+          sudo apt install -y aria2
+          if [[ "${{ inputs.tracker }}" == *true* ]]; then
+            echo -e "${INFO} Update BT trackers for Aria2" && echo
+            bash ${{ github.workspace }}/aria/tracker.sh ${{ github.workspace }}/aria/tracker_list.txt
+
+            if [ -n "${{ inputs.choice }}" ]; then
+              aria2c '${{ inputs.Link }}' --bt-tracker="$(cat "${{ github.workspace }}/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=${{ inputs.Seed }} -s 64 -x 16 --select-file=${{ inputs.choice }} --bt-remove-unselected-file=true
             else
-              aria2c '${{ github.event.inputs.BT }}' --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16
-            fi
+              aria2c '${{ inputs.Link }}' --bt-tracker="$(cat "${{ github.workspace }}/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=${{ inputs.Seed }} -s 64 -x 16
+            fi 
+
           else
-            sudo apt install -y aria2
-            wget "${{ github.event.inputs.HTTP }}" -O 1.torrent
-            if [[ "${{ inputs.tracker }}" == *true* ]]; then
-              echo -e "${INFO} Update BT trackers for Aria2" && echo
-              bash ${{ github.workspace }}/aria/tracker.sh ${{ github.workspace }}/aria/tracker_list.txt
-              if [ -n "${{ github.event.inputs.choice }}" ]; then
-                aria2c 1.torrent --bt-tracker="$(cat "${{ github.workspace }}/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16 --select-file=${{ github.event.inputs.choice }}
-              else
-                aria2c 1.torrent --bt-tracker="$(cat "${{ github.workspace }}/aria/tracker_list.txt" | tr '\n' ',' | sed 's/,$//')" --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16
-              fi 
+
+            if [ -n "${{ inputs.choice }}" ]; then
+              aria2c '${{ inputs.Link }}' --seed-time=${{ inputs.Seed }} -s 64 -x 16 --select-file=${{ inputs.choice }} --bt-remove-unselected-file=true
             else
-              if [ -n "${{ github.event.inputs.choice }}" ]; then
-                aria2c 1.torrent --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16 --select-file=${{ github.event.inputs.choice }}
-              else
-                aria2c 1.torrent --seed-time=${{ github.event.inputs.Seed }} -s 64 -x 16
-              fi
-            fi
+              aria2c '${{ inputs.Link }}' --seed-time=${{ inputs.Seed }} -s 64 -x 16
+            fi 
+
           fi
           ls
-          rm -rf 1.torrent
-          rm -rf *.aria2
+          find . -type f \( -name "*.torrent" -o  -name "*.lnk" -o -name "*.txt" -o -name "*.aria2" -o -name "*.cht.ass" -o -name "*.tc.ass" \) -exec rm {} +
           ls
           df -h
       - name: Get download folder name
@@ -123,12 +101,12 @@ jobs:
         working-directory: ${{ github.workspace }}/Server_Upload
         run: |
           download_folder="${{ steps.get_folder_name.outputs.folder_name }}"
-          mv "$download_folder" "${{ github.event.inputs.RenameFolder }}"
+          mv "$download_folder" "${{ inputs.RenameFolder }}"
       - name: RenameFile
-        working-directory: ${{ github.workspace }}/Server_Upload/${{ github.event.inputs.RenameFolder }}
-        if: ${{ github.event.inputs.RenameFile != '' }}
+        working-directory: ${{ github.workspace }}/Server_Upload/${{ inputs.RenameFolder }}
+        if: ${{ inputs.RenameFile != '' }}
         run: |
-          echo "${{ github.event.inputs.RenameFile }}" > commands.ps1
+          echo "${{ inputs.RenameFile }}" > commands.ps1
           chmod +x commands.ps1
           pwsh -File commands.ps1
           rm -rf commands.ps1
@@ -144,8 +122,8 @@ jobs:
             cd OnedriveCli
             mv ${{ github.workspace }}/Server_Upload ${{ github.workspace }}/OnedriveCli
             chmod +x OneDriveUploader
-            if [ -n "${{ github.event.inputs.OnedriveDir }}" ]; then
-              ./OneDriveUploader -s "Server_Upload" -r "${{ github.event.inputs.OnedriveDir }}"
+            if [ -n "${{ inputs.OnedriveDir }}" ]; then
+              ./OneDriveUploader -s "Server_Upload" -r "${{ inputs.OnedriveDir }}"
             else
               ./OneDriveUploader -s "Server_Upload"
             fi  
