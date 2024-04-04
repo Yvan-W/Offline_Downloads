@@ -87,7 +87,7 @@ jobs:
 
           fi
           ls
-          find . -type f \( -name "*.torrent" -o  -name "*.lnk" -o -name "*.txt" -o -name "*.aria2" -o -name "*.cht.ass" -o -name "*.tc.ass" \) -exec rm {} +
+          find . -type f \( -name "*.torrent" -o  -name "*.lnk" -o -name "*.txt" -o -name "*.aria2" -o -name "*.cht.ass" -o -name "*.tc.ass" -o -name "*.TC.ass" \) -exec rm {} +
           ls
           df -h
       - name: Get download folder name
