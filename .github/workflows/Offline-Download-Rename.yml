@@ -127,7 +127,7 @@ jobs:
               chmod +x OneDriveUploader
               ./OneDriveUploader -s "Server_Upload" -r "${{ inputs.UploadDir }}"
             else
-              wget ${{ secrets.RCLONE }} -O .config/rclone.yaml
+              wget ${{ secrets.RCLONE }} -O .config/rclone/rclone.conf
               rclone move ${{ github.workspace }}/Server_Upload TG:/Server_Upload
             fi  
           fi
