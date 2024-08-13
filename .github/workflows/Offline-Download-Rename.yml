@@ -129,7 +129,7 @@ jobs:
               ./OneDriveUploader -s "Server_Upload" -r "${{ inputs.UploadDir }}"
             else
               mkdir -p .config/rclone
-              wget ${{ secrets.RCLONE }} -O .config/rclone/rclone.conf
+              wget ${{ secrets.RCLONE }} -O /home/runner/.config/rclone/rclone.conf
               rclone move ${{ github.workspace }}/Server_Upload TG:/Server_Upload
             fi  
           fi
