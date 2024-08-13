@@ -60,7 +60,7 @@ jobs:
           sudo -E apt clean
           df -h
           sudo apt-get update -y
-          sudo apt-get install powershell -y
+          # sudo apt-get install powershell -y
           sudo -v ; curl https://rclone.org/install.sh | sudo bash
           rclone config file
       - uses: actions/checkout@v3
