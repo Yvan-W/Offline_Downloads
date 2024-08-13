@@ -39,7 +39,7 @@ on:
 
 jobs:
   OfflineDownload:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Space cleanup
         env:
@@ -62,6 +62,7 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install powershell -y
           sudo -v ; curl https://rclone.org/install.sh | sudo bash
+          rclone config file
       - uses: actions/checkout@v3
       - name: Download
         run: |
@@ -127,6 +128,7 @@ jobs:
               chmod +x OneDriveUploader
               ./OneDriveUploader -s "Server_Upload" -r "${{ inputs.UploadDir }}"
             else
+              mkdir -p .config/rclone
               wget ${{ secrets.RCLONE }} -O .config/rclone/rclone.conf
               rclone move ${{ github.workspace }}/Server_Upload TG:/Server_Upload
             fi  
