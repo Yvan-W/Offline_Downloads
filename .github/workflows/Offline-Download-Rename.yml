@@ -31,15 +31,15 @@ on:
         type: choice
         description: '阿里云盘或Onedrive'
         required: true
-        options: [Aliyun, Onedrive]
-        default: Aliyun
-      OnedriveDir:
-        description: 'Onedrive自定义上传路径'
-        required: false
+        options: [Aliyun, Onedrive, TG]
+        default: Onedrive
+      UploadDir:
+        description: '自定义上传路径'
+        required: true
 
 jobs:
   OfflineDownload:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Space cleanup
         env:
@@ -61,6 +61,7 @@ jobs:
           df -h
           sudo apt-get update -y
           sudo apt-get install powershell -y
+          sudo -v ; curl https://rclone.org/install.sh | sudo bash
       - uses: actions/checkout@v3
       - name: Download
         run: |
@@ -99,6 +100,7 @@ jobs:
           echo "::set-output name=folder_name::$download_folder"
       - name: Rename download folder
         working-directory: ${{ github.workspace }}/Server_Upload
+        if: ${{ inputs.RenameFolder != '' }}
         run: |
           download_folder="${{ steps.get_folder_name.outputs.folder_name }}"
           mv "$download_folder" "${{ inputs.RenameFolder }}"
@@ -116,15 +118,16 @@ jobs:
           if [[ "${{ inputs.UploadDisk }}" == *Aliyun* ]]; then
             cd ${{ github.workspace }}/aliyunpan
             ./aliyunpan login -RefreshToken=${{ secrets.ALIYUNTOKEN }}
-            ./aliyunpan upload ${{ github.workspace }}/Server_Upload /影视
+            ./aliyunpan upload ${{ github.workspace }}/Server_Upload /${{ inputs.UploadDir }}
             ./aliyunpan logout -y
           else
-            cd OnedriveCli
-            mv ${{ github.workspace }}/Server_Upload ${{ github.workspace }}/OnedriveCli
-            chmod +x OneDriveUploader
-            if [ -n "${{ inputs.OnedriveDir }}" ]; then
-              ./OneDriveUploader -s "Server_Upload" -r "${{ inputs.OnedriveDir }}"
+            if [[ "${{ inputs.UploadDisk }}" == *Onedrive* ]]; then
+              cd OnedriveCli
+              mv ${{ github.workspace }}/Server_Upload ${{ github.workspace }}/OnedriveCli
+              chmod +x OneDriveUploader
+              ./OneDriveUploader -s "Server_Upload" -r "${{ inputs.UploadDir }}"
             else
-              ./OneDriveUploader -s "Server_Upload"
+              wget ${{ secrets.RCLONE }} -O .config/rclone.yaml
+              rclone move ${{ github.workspace }}/Server_Upload TG:/Server_Upload
             fi  
           fi
