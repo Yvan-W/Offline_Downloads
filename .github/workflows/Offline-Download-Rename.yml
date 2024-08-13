@@ -49,7 +49,7 @@ jobs:
           
           sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
           sudo -E apt update
-          sudo -E apt -y purge azure-cli* ghc* docker* zulu* llvm* firefox google* dotnet* openjdk* mysql* php* mongodb* dotnet* snap*
+          sudo -E apt -y purge azure-cli* docker* llvm* firefox google* dotnet* mysql* php* dotnet* snap*
           sudo apt autoremove
           sudo apt autoclean
           sudo apt clean
